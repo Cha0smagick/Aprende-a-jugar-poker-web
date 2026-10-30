@@ -1,0 +1,156 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  schema?: object;
+}
+
+const {
+  title,
+  description = 'Curso completo de poker profesional - Del Cero al Héroe: Sistema Integral de Maestría en Poker',
+  canonical,
+  ogImage = '/assets/og-default.png',
+  noIndex = false,
+  schema,
+} = Astro.props;
+
+const siteUrl = 'https://poker-mastery.github.io';
+const pageUrl = canonical || Astro.url.pathname;
+const fullUrl = new URL(pageUrl, siteUrl).toString();
+const fullOgImage = new URL(ogImage, siteUrl).toString();
+
+const structuredData = schema || {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Poker Mastery',
+  description,
+  url: siteUrl,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={fullUrl} />
+    <meta name="robots" content={noIndex ? 'noindex, nofollow' : 'index, follow'} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="poker, curso, Texas Hold'em, GTO, estrategia, rangos, ICM, bankroll, mental game, entrenador, calculadora, certificación" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={fullUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Poker Mastery" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={fullUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImage} />
+    <meta name="twitter:site" content="@poker_mastery" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="alternate icon" href="/assets/favicon.ico" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <link rel="manifest" href="/assets/manifest.json" />
+
+    <!-- Fonts: Space Grotesk, DM Sans, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww" crossorigin="anonymous" />
+
+    <!-- Theme script (must be before body to prevent flash) -->
+    <script is:inline>
+      (function() {
+        try {
+          var theme = localStorage.getItem('poker-mastery-theme') || 'system';
+          var root = document.documentElement;
+          if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-bg-primary text-text-primary font-body antialiased min-h-screen flex flex-col">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only fixed top-4 left-4 z-toast bg-poker-felt text-white px-4 py-2 rounded-lg shadow-elevated">
+      Saltar al contenido principal
+    </a>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-sticky bg-bg-secondary/80 backdrop-blur-lg border-b border-border-default">
+      <slot name="header" />
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 w-full">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-bg-secondary border-t border-border-default">
+      <slot name="footer" />
+    </footer>
+
+    <!-- Global Modals Container -->
+    <div id="global-modals" class="fixed inset-0 z-modal pointer-events-none" aria-hidden="true"></div>
+
+    <!-- Toasts Container -->
+    <div id="toasts" class="fixed bottom-4 right-4 z-toast flex flex-col gap-2 pointer-events-none" aria-live="polite" aria-label="Notificaciones"></div>
+
+    <!-- Global Scripts -->
+    <script is:inline src="/scripts/global.js"></script>
+
+    <!-- KaTeX Auto-render -->
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.renderMathInElement) {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true},
+            ],
+            throwOnError: false,
+            trust: true,
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,560 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  schema?: object;
+  phaseTitle: string;
+  phaseRoute: string;
+  moduleTitle: string;
+  moduleRoute: string;
+  phaseColor: string;
+  phaseBadge: string;
+  moduleNumber: number;
+  difficulty: string;
+  difficultyLabel: string;
+  duration: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  schema,
+  phaseTitle,
+  phaseRoute,
+  moduleTitle,
+  moduleRoute,
+  phaseColor,
+  phaseBadge,
+  moduleNumber,
+  difficulty,
+  difficultyLabel,
+  duration,
+} = Astro.props;
+---
+
+<BaseLayout title={`${title} - Poker Mastery`} description={description} canonical={canonical} schema={schema}>
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <!-- Progress Bar Top -->
+    <div class="fixed top-16 left-0 right-0 z-sticky bg-bg-secondary/95 backdrop-blur border-b border-border-default hidden md:block" id="lesson-progress-bar">
+      <div class="container-narrow h-2">
+        <div class="progress h-full" id="lesson-progress">
+          <div class="progress-bar-gold h-full" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <header class="bg-bg-secondary border-b border-border-default py-8 md:py-12" id="lesson-header">
+      <div class="container-narrow">
+        <nav class="flex items-center gap-2 text-sm text-text-muted mb-4" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-poker-gold transition-colors">Inicio</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <a href="/curso" class="hover:text-poker-gold transition-colors">Curso</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <a href={phaseRoute} class="hover:text-poker-gold transition-colors">{phaseTitle}</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <a href={moduleRoute} class="hover:text-poker-gold transition-colors">{moduleTitle}</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span class="text-text-primary font-medium" aria-current="page">{title}</span>
+        </nav>
+
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <span class={`badge bg-phase-${phaseColor}`}>{phaseBadge}</span>
+              <span class="badge badge-gold">Módulo {moduleNumber}</span>
+              <span class={`badge diff-${difficulty}`}>{difficultyLabel}</span>
+            </div>
+            <h1 class="font-display font-bold text-display-sm md:text-display-md text-text-primary mb-2">{title}</h1>
+            <p class="text-text-secondary max-w-2xl">{description}</p>
+          </div>
+          
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-2 text-sm text-text-muted">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>{duration}</span>
+            </div>
+            <button class="btn-secondary btn-sm" id="bookmark-btn" aria-label="Marcar como favorita">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              <span>Guardar</span>
+            </button>
+            <button class="btn-primary btn-sm" id="complete-btn" aria-label="Marcar como completada">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Completar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Lesson Content -->
+    <article class="container-narrow py-8 md:py-12" id="lesson-content">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar: Table of Contents -->
+        <aside class="lg:col-span-1 hidden xl:block" id="lesson-sidebar">
+          <div class="sticky top-24 space-y-6">
+            <!-- Module Progress -->
+            <div class="card p-4">
+              <h3 class="font-semibold text-text-primary mb-3">Módulo {moduleNumber}</h3>
+              <nav class="space-y-2" id="module-toc">
+                <!-- Renderizado dinámicamente -->
+              </nav>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card p-4">
+              <h3 class="font-semibold text-text-primary mb-3">Acciones</h3>
+              <div class="space-y-2">
+                <button class="w-full btn-secondary btn-sm justify-start" id="prev-lesson">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  Lección Anterior
+                </button>
+                <button class="w-full btn-primary btn-sm justify-start" id="next-lesson">
+                  Lección Siguiente
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+                <a href={moduleRoute} class="w-full btn-secondary btn-sm justify-center">Volver al Módulo</a>
+              </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="card p-4" id="lesson-resources">
+              <h3 class="font-semibold text-text-primary mb-3">Recursos</h3>
+              <div class="space-y-2">
+                <!-- Renderizado dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-3 xl:col-span-3" id="lesson-main">
+          <div class="prose prose-poker max-w-none" id="lesson-body">
+            <slot name="content" />
+          </div>
+
+          <!-- Interactive Elements Container -->
+          <div id="interactive-elements"></div>
+
+          <!-- Quiz Checkpoint -->
+          <section class="mt-12 pt-8 border-t border-border-default" id="quiz-checkpoint">
+            <h2 class="font-display font-semibold text-heading-lg text-text-primary mb-6">Checkpoint: Verifica tu comprensión</h2>
+            <div id="quiz-container">
+              <!-- Quiz se renderiza dinámicamente -->
+            </div>
+          </section>
+
+          <!-- Navigation Footer -->
+          <nav class="mt-12 pt-8 border-t border-border-default flex items-center justify-between" id="lesson-nav">
+            <a href="#" class="btn-secondary btn-sm" id="nav-prev">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Anterior
+            </a>
+            <a href={moduleRoute} class="btn-secondary btn-sm">Módulo</a>
+            <a href="#" class="btn-primary btn-sm" id="nav-next">
+              Siguiente
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </article>
+
+    <!-- Related Lessons -->
+    <section class="bg-bg-secondary border-y border-border-default py-12" id="related-lessons">
+      <div class="container-narrow">
+        <h2 class="font-display font-semibold text-heading-lg text-text-primary mb-6">Lecciones Relacionadas</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="related-grid">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  // Lesson page initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    initLessonPage();
+  });
+
+  function initLessonPage() {
+    // Load progress
+    loadLessonProgress();
+    
+    // Setup scroll progress
+    setupScrollProgress();
+    
+    // Setup bookmark/complete buttons
+    setupLessonActions();
+    
+    // Load module TOC
+    loadModuleTOC();
+    
+    // Initialize KaTeX for formulas
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.getElementById('lesson-body'), {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true},
+        ],
+        throwOnError: false,
+        trust: true,
+      });
+    }
+    
+    // Initialize interactive components
+    initInteractiveElements();
+  }
+
+  function loadLessonProgress() {
+    const stored = localStorage.getItem('poker-mastery-progress');
+    if (!stored) return;
+    
+    try {
+      const progress = JSON.parse(stored);
+      const lessonId = getLessonId();
+      const lessonProgress = progress.lessons?.[lessonId];
+      
+      if (lessonProgress) {
+        const completeBtn = document.getElementById('complete-btn');
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        
+        if (lessonProgress.completed && completeBtn) {
+          completeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Completada';
+          completeBtn.classList.add('bg-success', 'border-success', 'text-white');
+          completeBtn.classList.remove('btn-primary');
+        }
+        
+        if (lessonProgress.bookmarked && bookmarkBtn) {
+          bookmarkBtn.innerHTML = '<svg class="w-4 h-4 fill-current" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg> Guardada';
+          bookmarkBtn.classList.add('bg-poker-gold', 'border-poker-gold', 'text-poker-black');
+          bookmarkBtn.classList.remove('btn-secondary');
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load lesson progress:', e);
+    }
+  }
+
+  function getLessonId() {
+    const path = window.location.pathname;
+    const match = path.match(/\/fase-(\d+)\/modulo-(\d+)\/leccion-(\d+)/);
+    if (match) {
+      return `phase-${match[1]}-module-${match[2]}-lesson-${match[3]}`;
+    }
+    return 'unknown';
+  }
+
+  function setupScrollProgress() {
+    const progressBar = document.getElementById('lesson-progress');
+    if (!progressBar) return;
+    
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+    };
+    
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+
+  function setupLessonActions() {
+    const completeBtn = document.getElementById('complete-btn');
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    const lessonId = getLessonId();
+    
+    completeBtn?.addEventListener('click', () => {
+      markLessonComplete(lessonId);
+    });
+    
+    bookmarkBtn?.addEventListener('click', () => {
+      toggleBookmark(lessonId);
+    });
+  }
+
+  function markLessonComplete(lessonId: string) {
+    const stored = localStorage.getItem('poker-mastery-progress');
+    if (!stored) return;
+    
+    try {
+      const progress = JSON.parse(stored);
+      if (!progress.lessons[lessonId]) {
+        progress.lessons[lessonId] = {
+          lessonId,
+          completed: false,
+          timeSpent: 0,
+          quizAttempts: 0,
+          lastVisited: new Date().toISOString(),
+          bookmarked: false,
+          notes: '',
+        };
+      }
+      
+      progress.lessons[lessonId].completed = true;
+      progress.lessons[lessonId].completedAt = new Date().toISOString();
+      progress.totalXP += 100;
+      
+      localStorage.setItem('poker-mastery-progress', JSON.stringify(progress));
+      
+      const completeBtn = document.getElementById('complete-btn');
+      if (completeBtn) {
+        completeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Completada';
+        completeBtn.classList.add('bg-success', 'border-success', 'text-white');
+        completeBtn.classList.remove('btn-primary');
+        (completeBtn as HTMLButtonElement).disabled = true;
+      }
+      
+      if (window.showToast) window.showToast('¡Lección completada! +100 XP', 'success');
+      
+      updateModuleProgress(progress, lessonId);
+    } catch (e) {
+      console.error('Error marking complete:', e);
+    }
+  }
+
+  function toggleBookmark(lessonId: string) {
+    const stored = localStorage.getItem('poker-mastery-progress');
+    if (!stored) return;
+    
+    try {
+      const progress = JSON.parse(stored);
+      if (!progress.lessons[lessonId]) {
+        progress.lessons[lessonId] = {
+          lessonId,
+          completed: false,
+          timeSpent: 0,
+          quizAttempts: 0,
+          lastVisited: new Date().toISOString(),
+          bookmarked: false,
+          notes: '',
+        };
+      }
+      
+      progress.lessons[lessonId].bookmarked = !progress.lessons[lessonId].bookmarked;
+      localStorage.setItem('poker-mastery-progress', JSON.stringify(progress));
+      
+      const bookmarkBtn = document.getElementById('bookmark-btn');
+      if (bookmarkBtn) {
+        const isBookmarked = progress.lessons[lessonId].bookmarked;
+        bookmarkBtn.innerHTML = isBookmarked 
+          ? '<svg class="w-4 h-4 fill-current" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg> Guardada'
+          : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg> Guardar';
+        bookmarkBtn.classList.toggle('bg-poker-gold', isBookmarked);
+        bookmarkBtn.classList.toggle('border-poker-gold', isBookmarked);
+        bookmarkBtn.classList.toggle('text-poker-black', isBookmarked);
+        bookmarkBtn.classList.toggle('btn-secondary', !isBookmarked);
+      }
+      
+      if (window.showToast) window.showToast(progress.lessons[lessonId].bookmarked ? 'Lección guardada' : 'Lección eliminada de guardados', 'info');
+    } catch (e) {
+      console.error('Error toggling bookmark:', e);
+    }
+  }
+
+  function updateModuleProgress(progress: any, lessonId: string) {
+    const match = lessonId.match(/phase-(\d+)-module-(\d+)/);
+    if (!match) return;
+    
+    const moduleId = parseInt(match[2], 10);
+    const module = progress.modules[moduleId];
+    if (!module) return;
+    
+    const moduleLessons = Object.keys(progress.lessons).filter(l => l.startsWith(`phase-${match[1]}-module-${moduleId}-`));
+    const completed = moduleLessons.filter(l => progress.lessons[l].completed).length;
+    module.lessonsCompleted = completed;
+    
+    localStorage.setItem('poker-mastery-progress', JSON.stringify(progress));
+  }
+
+  function loadModuleTOC() {
+    const toc = document.getElementById('module-toc');
+    if (!toc) return;
+    
+    const lessons = [
+      { num: 1, title: 'Reglas Oficiales de Texas Hold\'em', completed: true, current: false },
+      { num: 2, title: 'Estructura de Apuestas', completed: false, current: true },
+      { num: 3, title: 'Posiciones en la Mesa', completed: false, current: false },
+      { num: 4, title: 'Acciones Legales', completed: false, current: false },
+      { num: 5, title: 'Showdown', completed: false, current: false },
+      { num: 6, title: 'Irregularidades', completed: false, current: false },
+      { num: 7, title: 'Torneo vs Cash Game', completed: false, current: false },
+      { num: 8, title: 'Examen del Módulo', completed: false, current: false },
+    ];
+    
+    toc.innerHTML = lessons.map(l => `
+      <a href="/curso/fase-0/modulo-1/leccion-${l.num}" class="toc-item flex items-center gap-3 p-2 rounded-lg ${l.current ? 'bg-poker-felt/10 text-poker-felt' : 'hover:bg-bg-tertiary'} transition-colors ${l.completed ? 'text-success' : ''}">
+        <span class="w-6 h-6 flex items-center justify-center text-xs font-mono ${l.completed ? 'bg-success text-white' : l.current ? 'bg-poker-felt text-white' : 'bg-bg-tertiary'} rounded-full">
+          ${l.completed ? '✓' : l.num}
+        </span>
+        <span class="flex-1 text-sm truncate">${l.title}</span>
+        ${l.completed ? '<svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' : ''}
+      </a>
+    `).join('');
+  }
+
+  function initInteractiveElements() {
+    const containers = document.querySelectorAll<HTMLElement>('[data-interactive]');
+    containers.forEach(container => {
+      const type = container.dataset.interactive;
+      const config = JSON.parse(container.dataset.config || '{}');
+      
+      switch (type) {
+        case 'calculator':
+          mountCalculator(container, config);
+          break;
+        case 'trainer':
+          mountTrainer(container, config);
+          break;
+        case 'quiz':
+          mountQuiz(container, config);
+          break;
+        case 'chart':
+          mountChart(container, config);
+          break;
+        case 'replayer':
+          mountReplayer(container, config);
+          break;
+      }
+    });
+  }
+
+  function mountCalculator(container: HTMLElement, config: any) {
+    container.innerHTML = `<div class="card p-4 text-center text-text-muted">Calculadora: ${config.type} - Próximamente</div>`;
+  }
+
+  function mountTrainer(container: HTMLElement, config: any) {
+    container.innerHTML = `<div class="card p-4 text-center text-text-muted">Trainer: ${config.type} - Próximamente</div>`;
+  }
+
+  function mountQuiz(container: HTMLElement, config: any) {
+    if (!config.questions) return;
+    
+    container.innerHTML = config.questions.map((q: any, i: number) => `
+      <div class="quiz-question card p-4 mb-4" data-q="${i}">
+        <p class="font-medium text-text-primary mb-3">${i+1}. ${q.question}</p>
+        <div class="space-y-2">
+          ${q.options.map((opt: string, oi: number) => `
+            <button class="quiz-option w-full p-4 text-left bg-bg-secondary border border-border-default rounded-lg hover:border-poker-felt hover:bg-poker-felt/5 transition-all duration-150" 
+              data-correct="${oi === q.answer}"
+              onclick="selectQuizOption(this, ${i}, ${oi})">
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="quiz-explanation mt-3 p-3 bg-bg-tertiary rounded-lg hidden" id="quiz-exp-${i}">
+          <strong>Explicación:</strong> ${q.explanation}
+        </div>
+      </div>
+    `).join('');
+    
+    (window as any).selectQuizOption = (btn: HTMLElement, qIdx: number, optIdx: number) => {
+      const question = btn.closest('.quiz-question');
+      const options = question?.querySelectorAll<HTMLButtonElement>('.quiz-option');
+      const explanation = document.getElementById(`quiz-exp-${qIdx}`);
+      const isCorrect = btn.dataset.correct === 'true';
+      
+      options?.forEach(o => {
+        o.disabled = true;
+        if (o.dataset.correct === 'true') o.classList.add('correct');
+        else if (o === btn) o.classList.add('incorrect');
+      });
+      
+      explanation?.classList.remove('hidden');
+      
+      trackQuizAttempt(qIdx, isCorrect);
+    };
+  }
+
+  function trackQuizAttempt(questionIndex: number, correct: boolean) {
+    const lessonId = getLessonId();
+    const stored = localStorage.getItem('poker-mastery-progress');
+    if (!stored) return;
+    
+    try {
+      const progress = JSON.parse(stored);
+      if (!progress.lessons[lessonId]) return;
+      
+      progress.lessons[lessonId].quizAttempts++;
+      if (correct) {
+        progress.lessons[lessonId].quizScore = Math.max(progress.lessons[lessonId].quizScore || 0, 100);
+        progress.totalXP += 25;
+      }
+      
+      localStorage.setItem('poker-mastery-progress', JSON.stringify(progress));
+    } catch (e) {}
+  }
+
+  function mountChart(container: HTMLElement, config: any) {
+    container.innerHTML = `<div class="chart-container"><canvas id="chart-${Math.random()}"></canvas></div>`;
+  }
+
+  function mountReplayer(container: HTMLElement, config: any) {
+    container.innerHTML = `<div class="card p-4 text-center text-text-muted">Hand Replayer - Próximamente</div>`;
+  }
+
+  function showToast(message: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
+    if (window.showToast) window.showToast(message, type);
+    else alert(message);
+  }
+</script>
+
+<style>
+  .prose-poker {
+    @apply text-text-primary;
+  }
+  
+  .prose-poker h2 { @apply font-display font-bold text-heading-xl text-text-primary mt-10 mb-4 pb-2 border-b border-border-light; }
+  .prose-poker h3 { @apply font-display font-semibold text-heading-lg text-text-primary mt-8 mb-3; }
+  .prose-poker h4 { @apply font-semibold text-heading-md text-text-primary mt-6 mb-2; }
+  
+  .prose-poker p { @apply text-body leading-relaxed mb-4; }
+  .prose-poker strong { @apply font-semibold text-text-primary; }
+  .prose-poker em { @apply italic text-text-secondary; }
+  
+  .prose-poker ul, .prose-poker ol { @apply mb-4 pl-6; }
+  .prose-poker ul { @apply list-disc; }
+  .prose-poker ol { @apply list-decimal; }
+  .prose-poker li { @apply mb-2; }
+  
+  .prose-poker blockquote { @apply border-l-4 border-poker-gold pl-4 italic text-text-secondary my-4; }
+  .prose-poker code { @apply font-mono text-sm bg-bg-tertiary px-1.5 py-0.5 rounded text-poker-red; }
+  .prose-poker pre { @apply bg-poker-black p-4 rounded-lg overflow-x-auto mb-4; }
+  .prose-poker pre code { @apply bg-transparent p-0 text-text-secondary; }
+  
+  .prose-poker table { @apply w-full border-collapse mb-4; }
+  .prose-poker th, .prose-poker td { @apply px-4 py-3 text-left border-b border-border-light; }
+  .prose-poker th { @apply font-semibold text-text-secondary bg-bg-tertiary; }
+  .prose-poker tr:hover td { @apply bg-bg-hover/50; }
+  
+  .prose-poker a { @apply text-poker-felt underline-offset-2 hover:text-poker-felt-light; }
+  
+  .prose-poker img { @apply rounded-xl shadow-card my-6 max-w-full h-auto; }
+  
+  .prose-poker hr { @apply border-border-default my-8; }
+  
+  .toc-item { }
+  
+  .quiz-option.selected { @apply border-poker-felt bg-poker-felt/10; }
+  .quiz-option.correct { @apply border-success bg-success/10; }
+  .quiz-option.incorrect { @apply border-error bg-error/10; }
+  
+  /* Formula tooltips */
+  .formula-container { @apply relative my-6; }
+  .formula-trigger { @apply inline-flex items-center gap-2 px-3 py-1.5 bg-bg-tertiary rounded-lg text-sm font-mono text-text-secondary hover:bg-bg-hover transition-colors cursor-pointer; }
+  .formula-tooltip { @apply absolute left-0 top-full mt-2 w-96 bg-bg-secondary border border-border-default rounded-xl shadow-elevated p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-tooltip; }
+  .formula-tooltip::before { @apply content-[''] absolute -top-2 left-6 w-4 h-4 bg-bg-secondary border-t border-l border-border-default rotate-45; }
+</style>

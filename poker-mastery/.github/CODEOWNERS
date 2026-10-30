@@ -1,0 +1,20 @@
+# Poker Mastery - Code Owners
+
+# Global owners - reviewed on every PR
+*       @poker-mastery
+
+# Specific paths
+/src/pages/           @poker-mastery
+/src/layouts/         @poker-mastery
+/src/components/      @poker-mastery
+/src/content/         @poker-mastery
+/src/stores/          @poker-mastery
+astro.config.mjs      @poker-mastery
+tailwind.config.js    @poker-mastery
+tsconfig.json         @poker-mastery
+package.json          @poker-mastery
+.github/              @poker-mastery
+
+# Documentation
+docs/                 @poker-mastery
+README.md             @poker-mastery

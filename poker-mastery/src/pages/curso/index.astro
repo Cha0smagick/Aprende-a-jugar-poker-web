@@ -1,0 +1,231 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Curso Completo de Poker - Poker Mastery" description="Currículo completo: 5 fases, 25 módulos, 150+ lecciones. De amateur a profesional con certificación oficial.">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <!-- Course Hero -->
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-poker-felt opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-poker-felt"></span>
+            </span>
+            25 Módulos · 150+ Lecciones · 20+ Herramientas · Certificación
+          </div>
+          
+          <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">
+            Currículo Completo
+            <br />
+            <span class="text-gradient-gold">Del Cero al Héroe</span>
+          </h1>
+          
+          <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+            Progresión lineal diseñada por expertos. Cada fase construye sobre la anterior. 
+            Exámenes integradores al final de cada fase. Diplomas verificables por módulo, fase y curso completo.
+          </p>
+
+          <!-- Progress Overview -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12" id="course-progress">
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold" id="progress-overall">0%</div>
+              <div class="text-sm text-text-muted">Progreso Total</div>
+              <div class="progress mt-2"><div class="progress-bar" style="width: 0%"></div></div>
+            </div>
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold" id="progress-lessons">0/150</div>
+              <div class="text-sm text-text-muted">Lecciones Completadas</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold" id="progress-modules">0/25</div>
+              <div class="text-sm text-text-muted">Módulos Aprobados</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold" id="progress-diplomas">0</div>
+              <div class="text-sm text-text-muted">Diplomas Obtenidos</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <a href="/curso/fase-0/modulo-1/leccion-1" class="btn-primary btn-lg">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              Comenzar Fase 0
+            </a>
+            <a href="/herramientas" class="btn-secondary btn-lg">Ver Herramientas</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phases Overview -->
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">5 Fases de Maestría</h2>
+          <p class="text-body-lg text-text-secondary">Progresión estructurada desde fundamentos absolutos hasta nivel profesional élite.</p>
+        </header>
+
+        <div class="space-y-8" id="phases-container">
+          <!-- Fases se renderizan dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Access Tools -->
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Acceso Rápido a Herramientas</h2>
+          <p class="text-body-lg text-text-secondary">Las calculadoras y trainers que usarás en cada fase.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <a href="/herramientas/equity" class="card-interactive p-6 text-center group">
+            <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">🎯</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Equity Calculator</h3>
+            <p class="text-text-secondary text-sm mb-4">Range vs Range, Monte Carlo, heatmaps</p>
+            <span class="btn-secondary btn-sm">Usar →</span>
+          </a>
+          <a href="/herramientas/pot-odds" class="card-interactive p-6 text-center group">
+            <div class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">🧮</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Pot Odds / MDF</h3>
+            <p class="text-text-secondary text-sm mb-4">Cálculo paso a paso con LaTeX, implied odds</p>
+            <span class="btn-secondary btn-sm">Usar →</span>
+          </a>
+          <a href="/herramientas/icm" class="card-interactive p-6 text-center group">
+            <div class="w-14 h-14 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">🏆</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">ICM Calculator</h3>
+            <p class="text-text-secondary text-sm mb-4">Chip EV → $EV, Bubble Factor, Risk Premium</p>
+            <span class="btn-secondary btn-sm">Usar →</span>
+          </a>
+          <a href="/herramientas/trainers" class="card-interactive p-6 text-center group">
+            <div class="w-14 h-14 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">🧠</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Trainers</h3>
+            <p class="text-text-secondary text-sm mb-4">Preflop, Flop Texture, ICM, Mental Game</p>
+            <span class="btn-secondary btn-sm">Entrenar →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certification Info -->
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Sistema de Certificación</h2>
+          <p class="text-body-lg text-text-secondary">Demuestra tu dominio con diplomas verificables públicamente.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-6 text-center">
+            <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4 text-3xl">📄</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Diploma de Módulo</h3>
+            <p class="text-text-secondary text-sm mb-4">Completa todas las lecciones + examen ≥ 80%. Hash SHA-256 único.</p>
+            <span class="badge badge-success">25 disponibles</span>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4 text-3xl">🏅</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Diploma de Fase</h3>
+            <p class="text-text-secondary text-sm mb-4">Aprueba todos los módulos + examen integrador ≥ 85%. Diseño premium.</p>
+            <span class="badge badge-info">6 disponibles</span>
+          </div>
+          <div class="card p-6 text-center gradient-border">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-poker-gold to-poker-gold-light flex items-center justify-center mx-auto mb-4 text-3xl">🏆</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Master Poker Strategist</h3>
+            <p class="text-text-secondary text-sm mb-4">Curso completo + examen final ≥ 90% + proyecto final. Perfil público verificable.</p>
+            <span class="badge badge-gold">Único</span>
+          </div>
+        </div>
+
+        <div class="text-center mt-10">
+          <a href="/diplomas" class="btn-secondary btn-lg">Verificar Diploma / Ver Ejemplos</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => { loadUserProgress(); renderPhases(); });
+
+async function loadUserProgress() {
+  try {
+    const stored = localStorage.getItem('poker-mastery-progress');
+    if (stored) {
+      const progress = JSON.parse(stored);
+      updateProgressUI(progress);
+    }
+  } catch (e) {
+    console.warn('Could not load progress:', e);
+  }
+}
+
+function updateProgressUI(progress: any) {
+  const overall = progress.overallProgress || 0;
+  const lessonsDone = Object.values(progress.lessons || {}).filter((l: any) => l.completed).length;
+  const modulesPassed = Object.values(progress.modules || {}).filter((m: any) => m.examPassed).length;
+  const diplomas = Object.values(progress.modules || {}).filter((m: any) => m.diplomaGenerated).length + 
+                   Object.values(progress.phases || {}).filter((p: any) => p.diplomaGenerated).length;
+
+  document.getElementById('progress-overall').textContent = overall + '%';
+  document.getElementById('progress-lessons').textContent = lessonsDone + '/150';
+  document.getElementById('progress-modules').textContent = modulesPassed + '/25';
+  document.getElementById('progress-diplomas').textContent = String(diplomas);
+
+  const bar = document.querySelector('#course-progress .progress-bar');
+  if (bar) (bar as HTMLElement).style.width = overall + '%';
+}
+
+function renderPhases() {
+  const phasesContainer = document.getElementById('phases-container');
+  if (!phasesContainer) return;
+
+  const phases = [
+    { id: 0, title: 'Fundamentos Absolutos', subtitle: 'La base inquebrantable', description: 'Domina las reglas, terminología y matemáticas esenciales que todo jugador profesional conoce de memoria.', modules: 3, lessons: 25, duration: '10h', color: 'green', icon: '🟢', badge: 'Novato', route: '/curso/fase-0' },
+    { id: 1, title: 'Maestría Preflop', subtitle: 'Construye rangos de acero', description: 'Rangos GTO por posición, 3-bet, 4-bet, cold calls, blind defense y steals. La base de todo juego ganador.', modules: 5, lessons: 46, duration: '23h', color: 'blue', icon: '🔵', badge: 'Preflop Crusher', route: '/curso/fase-1' },
+    { id: 2, title: 'Dominio Postflop', subtitle: 'Donde se gana el dinero real', description: 'CBetting, barreling, check-raise, multiway, texturas de flop, turn/river play. Decisiones multi-street precisas.', modules: 6, lessons: 54, duration: '27h', color: 'yellow', icon: '🟡', badge: 'Postflop Pro', route: '/curso/fase-2' },
+    { id: 3, title: 'Conceptos Avanzados', subtitle: 'Nivel élite: GTO, ICM, Mental', description: 'Teoría de juegos, solvers, ICM, bankroll, tilt control, population analysis. La separación entre buenos y grandes.', modules: 5, lessons: 44, duration: '22h', color: 'orange', icon: '🟠', badge: 'Advanced Strategist', route: '/curso/fase-3' },
+    { id: 4, title: 'Especializaciones', subtitle: 'Domina tu formato', description: 'Cash games, torneos MTT/SNG, heads-up. Estrategias específicas para cada ecosistema.', modules: 3, lessons: 30, duration: '15h', color: 'red', icon: '🔴', badge: 'Format Specialist', route: '/curso/fase-4' },
+    { id: 5, title: 'Maestría Profesional', subtitle: 'Carrera, coaching, lifestyle', description: 'Overbetting, polar/merged, coaching others, content creation, impuestos, vida pro. El círculo se cierra.', modules: 3, lessons: 20, duration: '10h', color: 'purple', icon: '🟣', badge: 'Poker Master', route: '/curso/fase-5' },
+  ];
+
+  if (!phasesContainer) return;
+
+  phasesContainer.innerHTML = phases.map((phase, i) => `
+    <article class="card p-6 md:p-8 group relative overflow-hidden" style="animation-delay: ${i * 100}ms">
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-${phase.color}-500"></div>
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="flex items-center gap-4 md:gap-6 flex-1 min-w-0">
+          <div class="w-16 h-16 rounded-xl bg-${phase.color}-100 dark:bg-${phase.color}-900/30 flex items-center justify-center text-3xl flex-shrink-0">${phase.icon}</div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="badge bg-${phase.color}-100 dark:bg-${phase.color}-900/30 text-${phase.color}-600 dark:text-${phase.color}-400 font-medium px-3 py-1">${phase.badge}</span>
+              <h3 class="font-display font-bold text-heading-xl text-text-primary">${phase.title}</h3>
+            </div>
+            <p class="text-text-secondary mb-3">${phase.subtitle}</p>
+            <p class="text-sm text-text-muted line-clamp-2">${phase.description}</p>
+            <div class="flex flex-wrap items-center gap-4 mt-3 text-sm text-text-muted">
+              <span><svg class="w-4 h-4 inline mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ${phase.duration}</span>
+              <span><svg class="w-4 h-4 inline mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg> ${phase.lessons} lecciones</span>
+              <span><svg class="w-4 h-4 inline mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 01-2-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> ${phase.modules} módulos</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col md:items-end gap-3 md:gap-0 md:flex-row flex-shrink-0">
+          <a href="${phase.route}" class="btn-primary btn-sm w-full md:w-auto group">
+            Ver Módulos
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+</script>

@@ -1,0 +1,256 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Equity Calculator - Poker Mastery" description="Calculadora de equity profesional: Monte Carlo + enumeración exacta. Range vs Range, heatmaps, multiway. Gratis, offline." canonical="/herramientas/equity">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <div class="container-wide py-8">
+      <header class="mb-8">
+        <nav class="flex items-center gap-2 text-sm text-text-muted mb-4">
+          <a href="/" class="hover:text-poker-gold">Inicio</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <a href="/herramientas" class="hover:text-poker-gold">Herramientas</a>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span class="text-text-primary font-medium">Equity Calculator</span>
+        </nav>
+        <h1 class="font-display font-bold text-display-sm text-text-primary mb-2">Equity Calculator</h1>
+        <p class="text-text-secondary">Monte Carlo + enumeración exacta · Range vs Range · Heatmaps · Multiway</p>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          <section class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-semibold text-heading-md text-text-primary">Rango Hero</h2>
+              <span class="badge badge-blue" id="range1-combos">0 combos</span>
+            </div>
+            <div class="space-y-4">
+              <select id="range1-preset" class="w-full px-4 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none">
+                <option value="">-- Seleccionar predefinido --</option>
+                <optgroup label="Premium">
+                  <option value="AA">AA (6 combos)</option>
+                  <option value="KK+">KK+ (12 combos)</option>
+                  <option value="QQ+">QQ+ (18 combos)</option>
+                  <option value="JJ+">JJ+ (24 combos)</option>
+                  <option value="TT+">TT+ (30 combos)</option>
+                  <option value="AKs">AKs (4 combos)</option>
+                  <option value="AKo">AKo (12 combos)</option>
+                  <option value="AK">AK (16 combos)</option>
+                </optgroup>
+                <optgroup label="Open Ranges (6-max)">
+                  <option value="UTG">UTG Open (~13%)</option>
+                  <option value="MP">MP Open (~18%)</option>
+                  <option value="CO">CO Open (~28%)</option>
+                  <option value="BTN">BTN Open (~45%)</option>
+                  <option value="SB">SB Open (~65%)</option>
+                </optgroup>
+                <optgroup label="Defense Ranges">
+                  <option value="BBvsBTN">BB vs BTN (~35%)</option>
+                  <option value="BBvsCO">BB vs CO (~28%)</option>
+                  <option value="3betIP">3-bet IP (~8%)</option>
+                  <option value="3betOOP">3-bet OOP (~5%)</option>
+                  <option value="4bet">4-bet (~2%)</option>
+                </optgroup>
+                <option value="custom">✏️ Personalizado...</option>
+              </select>
+              <textarea id="range1-custom" class="w-full h-24 px-4 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary font-mono text-sm placeholder-text-muted focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none hidden" placeholder="Formato: AA, KK, AKs, AKo, AQs+, 22-99, A2s+, K9s+, Q9s+, J9s+, T9s, 98s, AJo+, KQo&#10;Una mano por línea o separadas por comas"></textarea>
+            </div>
+            <div class="mt-4 p-3 bg-bg-tertiary rounded-lg">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-text-secondary">Combos totales:</span>
+                <span class="font-mono font-semibold text-text-primary" id="range1-count">0</span>
+              </div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar range1-fill" id="range1-progress" style="width: 0%"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-semibold text-heading-md text-text-primary">Rango Villain</h2>
+              <span class="badge badge-red" id="range2-combos">0 combos</span>
+            </div>
+            <div class="space-y-4">
+              <select id="range2-preset" class="w-full px-4 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none">
+                <option value="">-- Seleccionar predefinido --</option>
+                <optgroup label="Premium">
+                  <option value="AA">AA (6 combos)</option>
+                  <option value="KK+">KK+ (12 combos)</option>
+                  <option value="QQ+">QQ+ (18 combos)</option>
+                  <option value="JJ+">JJ+ (24 combos)</option>
+                  <option value="TT+">TT+ (30 combos)</option>
+                  <option value="AK">AK (16 combos)</option>
+                </optgroup>
+                <optgroup label="Open Ranges (6-max)">
+                  <option value="UTG">UTG Open (~13%)</option>
+                  <option value="MP">MP Open (~18%)</option>
+                  <option value="CO">CO Open (~28%)</option>
+                  <option value="BTN">BTN Open (~45%)</option>
+                  <option value="SB">SB Open (~65%)</option>
+                </optgroup>
+                <optgroup label="Defense Ranges">
+                  <option value="BBvsBTN">BB vs BTN (~35%)</option>
+                  <option value="BBvsCO">BB vs CO (~28%)</option>
+                  <option value="3betIP">3-bet IP (~8%)</option>
+                  <option value="3betOOP">3-bet OOP (~5%)</option>
+                  <option value="4bet">4-bet (~2%)</option>
+                </optgroup>
+                <option value="custom">✏️ Personalizado...</option>
+              </select>
+              <textarea id="range2-custom" class="w-full h-24 px-4 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary font-mono text-sm placeholder-text-muted focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none hidden" placeholder="Formato: AA, KK, AKs, AKo, AQs+, 22-99, A2s+, K9s+, Q9s+, J9s+, T9s, 98s, AJo+, KQo"></textarea>
+            </div>
+            <div class="mt-4 p-3 bg-bg-tertiary rounded-lg">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-text-secondary">Combos totales:</span>
+                <span class="font-mono font-semibold text-text-primary" id="range2-count">0</span>
+              </div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar range2-fill" id="range2-progress" style="width: 0%"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-semibold text-heading-md text-text-primary">Board (0-5 cartas)</h2>
+              <button id="clear-board" class="btn-secondary btn-sm">Limpiar</button>
+            </div>
+            <div class="space-y-4">
+              <div class="flex gap-2">
+                <input type="text" id="board-input" class="flex-1 px-4 py-3 bg-bg-tertiary border border-border-default rounded-lg text-text-primary font-mono text-lg placeholder-text-muted focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none" placeholder="Ej: As Kh 7d | 9s 8s 7h | As Ks Qs Js Ts" maxlength="20" />
+                <div id="board-visual" class="flex items-center gap-2 min-w-[200px]"></div>
+              </div>
+              <div class="flex flex-wrap gap-2"><span class="text-sm text-text-muted">Quick add:</span><button class="quick-card" data-card="As">A♠</button><button class="quick-card" data-card="Ks">K♠</button><button class="quick-card" data-card="Qs">Q♠</button><button class="quick-card" data-card="Js">J♠</button><button class="quick-card" data-card="Ts">T♠</button><button class="quick-card" data-card="9s">9♠</button><button class="quick-card" data-card="8s">8♠</button><button class="quick-card" data-card="7s">7♠</button><button class="quick-card" data-card="6s">6♠</button><button class="quick-card" data-card="5s">5♠</button><button class="quick-card" data-card="4s">4♠</button><button class="quick-card" data-card="3s">3♠</button><button class="quick-card" data-card="2s">2♠</button></div>
+              <div class="flex flex-wrap gap-2"><span class="text-sm text-text-muted"></span><button class="quick-card red" data-card="Ah">A♥</button><button class="quick-card red" data-card="Kh">K♥</button><button class="quick-card red" data-card="Qh">Q♥</button><button class="quick-card red" data-card="Jh">J♥</button><button class="quick-card red" data-card="Th">T♥</button><button class="quick-card red" data-card="9h">9♥</button><button class="quick-card red" data-card="8h">8♥</button><button class="quick-card red" data-card="7h">7♥</button><button class="quick-card red" data-card="6h">6♥</button><button class="quick-card red" data-card="5h">5♥</button><button class="quick-card red" data-card="4h">4♥</button><button class="quick-card red" data-card="3h">3♥</button><button class="quick-card red" data-card="2h">2♥</button></div>
+              <div class="flex flex-wrap gap-2"><span class="text-sm text-text-muted"></span><button class="quick-card" data-card="Ad">A♦</button><button class="quick-card" data-card="Kd">K♦</button><button class="quick-card" data-card="Qd">Q♦</button><button class="quick-card" data-card="Jd">J♦</button><button class="quick-card" data-card="Td">T♦</button><button class="quick-card" data-card="9d">9♦</button><button class="quick-card" data-card="8d">8♦</button><button class="quick-card" data-card="7d">7♦</button><button class="quick-card" data-card="6d">6♦</button><button class="quick-card" data-card="5d">5♦</button><button class="quick-card" data-card="4d">4♦</button><button class="quick-card" data-card="3d">3♦</button><button class="quick-card" data-card="2d">2♦</button></div>
+              <div class="flex flex-wrap gap-2"><span class="text-sm text-text-muted"></span><button class="quick-card" data-card="Ac">A♣</button><button class="quick-card" data-card="Kc">K♣</button><button class="quick-card" data-card="Qc">Q♣</button><button class="quick-card" data-card="Jc">J♣</button><button class="quick-card" data-card="Tc">T♣</button><button class="quick-card" data-card="9c">9♣</button><button class="quick-card" data-card="8c">8♣</button><button class="quick-card" data-card="7c">7♣</button><button class="quick-card" data-card="6c">6♣</button><button class="quick-card" data-card="5c">5♣</button><button class="quick-card" data-card="4c">4♣</button><button class="quick-card" data-card="3c">3♣</button><button class="quick-card" data-card="2c">2♣</button></div>
+            </div>
+          </section>
+
+          <section class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-semibold text-heading-md text-text-primary">Configuración</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-2">Simulaciones Monte Carlo</label>
+                <div class="flex items-center gap-4">
+                  <input type="range" id="simulations" min="1000" max="200000" step="1000" value="50000" class="flex-1 accent-poker-gold" />
+                  <span id="sim-value" class="font-mono text-lg text-poker-gold min-w-[80px] text-right">50,000</span>
+                </div>
+                <div class="flex gap-2 mt-3 flex-wrap">
+                  <button class="sim-preset btn-secondary btn-sm" data-sims="10000">10K (rápido)</button>
+                  <button class="sim-preset btn-primary btn-sm" data-sims="50000">50K (estándar)</button>
+                  <button class="sim-preset btn-secondary btn-sm" data-sims="100000">100K (preciso)</button>
+                  <button class="sim-preset btn-secondary btn-sm" data-sims="200000">200K (máx)</button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-2">Modo</label>
+                <div class="flex gap-3">
+                  <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="mode" value="montecarlo" checked class="radio-input" /><span>Monte Carlo</span></label>
+                  <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="mode" value="exact" class="radio-input" /><span>Enumeración exacta</span></label>
+                </div>
+                <p class="text-sm text-text-muted mt-2">Exacto solo para ≤2 rangos sin board o board completo</p>
+              </div>
+            </div>
+            <button id="calculate-btn" class="btn-primary w-full mt-6 py-4 text-lg">
+              <span id="btn-text">Calcular Equity</span>
+              <span id="btn-loading" class="hidden flex items-center gap-2"><span class="spinner-sm"></span> Calculando...</span>
+            </button>
+          </section>
+        </div>
+
+        <div class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <section class="card p-6" id="results-section" style="display: none;">
+              <h2 class="font-semibold text-heading-md text-text-primary mb-4">Resultados</h2>
+              <div class="space-y-6">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="font-medium text-text-primary" id="r1-name">Rango 1</span>
+                    <span class="font-display font-bold text-2xl text-poker-gold" id="r1-equity">0.00%</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar range1-fill" id="r1-bar" style="width: 0%"></div>
+                  </div>
+                  <div class="flex justify-between text-sm text-text-muted mt-1">
+                    <span id="r1-wins">0 wins</span>
+                    <span id="r1-ties">0 ties</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="font-medium text-text-primary" id="r2-name">Rango 2</span>
+                    <span class="font-display font-bold text-2xl text-poker-red" id="r2-equity">0.00%</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar range2-fill" id="r2-bar" style="width: 0%"></div>
+                  </div>
+                  <div class="flex justify-between text-sm text-text-muted mt-1">
+                    <span id="r2-wins">0 wins</span>
+                    <span id="r2-ties">0 ties</span>
+                  </div>
+                </div>
+                <div id="ties-section" class="hidden">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="font-medium text-text-primary">Empates</span>
+                    <span class="font-display font-bold text-2xl text-warning" id="ties-equity">0.00%</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar" style="background: linear-gradient(90deg, var(--warning), var(--warning-light)); width: 0%;" id="ties-bar"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 p-4 bg-bg-tertiary rounded-lg">
+                <div class="flex items-center justify-between text-sm mb-2">
+                  <span class="text-text-secondary">Simulaciones</span>
+                  <span class="font-mono text-text-primary" id="sim-count">0</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-text-secondary">Tiempo</span>
+                  <span class="font-mono text-text-primary" id="calc-time">0ms</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="card p-6">
+              <h2 class="font-semibold text-heading-md text-text-primary mb-4">Heatmap Range vs Range</h2>
+              <div class="aspect-square bg-bg-tertiary rounded-lg border border-border-default flex items-center justify-center">
+                <div class="text-center text-text-muted p-4">
+                  <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                  <p>Heatmap interactivo próximamente</p>
+                  <p class="text-xs mt-1">Cada celda = equity de un combo vs rango rival</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="card p-6">
+              <h2 class="font-semibold text-heading-md text-text-primary mb-4">Exportar</h2>
+              <div class="space-y-3">
+                <button id="export-json" class="btn-secondary w-full justify-start">📄 JSON</button>
+                <button id="export-csv" class="btn-secondary w-full justify-start">📊 CSV</button>
+                <button id="share-result" class="btn-primary w-full justify-start">🔗 Compartir</button>
+              </div>
+            </section>
+
+            <section class="card p-6">
+              <h2 class="font-semibold text-heading-md text-text-primary mb-4">Fórmulas</h2>
+              <p class="text-sm text-text-secondary mb-4"><strong>Definición de Equity:</strong> Equity(R1, R2, B) = 1/(|R1|*|R2|*|Brem|) * sum(h1 in R1) sum(h2 in R2) sum(b in Brem) 1[h1 > h2 | B U b]</p>
+              <p class="text-sm text-text-secondary mb-4"><strong>Estimación Monte Carlo:</strong> E_hat = W1/N ≈ Equity con error estándar sigma = sqrt(E_hat*(1-E_hat)/N)</p>
+              <p class="text-sm text-text-secondary"><strong>Intervalo de Confianza 95%:</strong> CI_95% = E_hat ± 1.96 * sqrt(E_hat*(1-E_hat)/N)</p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script type="module" src="/scripts/equity-calculator.js"></script>

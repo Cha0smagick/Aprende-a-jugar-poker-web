@@ -1,0 +1,124 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Poker Mastery - Curso Completo de Poker Profesional" description="El curso más completo para dominar Texas Hold'em. De amateur a profesional con certificación oficial.">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6 animate-fade-in">
+            Versión 1.0 · Lanzamiento Octubre 2026 · 100% Gratis y Open Source
+          </div>
+          <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-6 animate-slide-up">
+            Domina el Poker Profesional<br />
+            <span class="text-gradient-gold">Del Cero al Héroe</span>
+          </h1>
+          <p class="text-body-lg md:text-heading-sm text-text-secondary mb-8 max-w-2xl mx-auto animate-slide-up">
+            El sistema integral más completo: 25 módulos, 150+ lecciones, 20+ herramientas interactivas, trainers gamificados, diplomas verificables y comunidad activa.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up" style="animation-delay: 200ms;">
+            <a href="/curso/fase-0/modulo-1/leccion-1" class="btn-primary btn-lg group">
+              <span>Comenzar Gratis Ahora</span>
+            </a>
+            <a href="/herramientas" class="btn-secondary btn-lg">
+              Explorar Herramientas
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-bg-secondary border-y border-border-default py-8">
+      <div class="container-wide">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
+          <div class="p-4">
+            <div class="text-3xl md:text-4xl font-display font-bold text-poker-gold" data-count="150">0</div>
+            <div class="text-sm text-text-muted mt-1">Lecciones Completas</div>
+          </div>
+          <div class="p-4">
+            <div class="text-3xl md:text-4xl font-display font-bold text-poker-gold" data-count="20">0</div>
+            <div class="text-sm text-text-muted mt-1">Calculadoras & Trainers</div>
+          </div>
+          <div class="p-4">
+            <div class="text-3xl md:text-4xl font-display font-bold text-poker-gold" data-count="25">0</div>
+            <div class="text-sm text-text-muted mt-1">Módulos Certificados</div>
+          </div>
+          <div class="p-4">
+            <div class="text-3xl md:text-4xl font-display font-bold text-poker-gold" data-count="100">0</div>
+            <div class="text-sm text-text-muted mt-1">Horas de Contenido</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Currículo Completo: 5 Fases, 25 Módulos</h2>
+          <p class="text-body-lg text-text-secondary">Progresión lineal diseñada por expertos. Cada fase construye sobre la anterior.</p>
+        </header>
+        <div class="text-center mt-12">
+          <a href="/curso" class="btn-gold btn-lg">Ver Currículo Detallado Completo</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Herramientas Profesionales Incluidas</h2>
+          <p class="text-body-lg text-text-secondary">Todas las calculadoras y trainers que usan los pros. Gratis, sin límites, funcionan offline.</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <a href="/herramientas/equity" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🎯</div>
+              <h3 class="font-semibold text-heading-md text-text-primary mb-2">Equity Calculator</h3>
+              <p class="text-text-secondary text-sm mb-4">Monte Carlo + enumeración exacta.</p>
+              <span class="btn-secondary btn-sm">Probar →</span>
+            </div>
+          </a>
+          <a href="/herramientas/pot-odds" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🧮</div>
+              <h3 class="font-semibold text-heading-md text-text-primary mb-2">Pot Odds / MDF</h3>
+              <p class="text-text-secondary text-sm mb-4">Cálculo paso a paso con LaTeX.</p>
+              <span class="btn-secondary btn-sm">Probar →</span>
+            </div>
+          </a>
+          <a href="/herramientas/icm" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🏆</div>
+              <h3 class="font-semibold text-heading-md text-text-primary mb-2">ICM Calculator</h3>
+              <p class="text-text-secondary text-sm mb-4">Chip EV → $EV, Bubble Factor.</p>
+              <span class="btn-secondary btn-sm">Probar →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <div class="felt-bg rounded-2xl p-8 md:p-16 text-center max-w-3xl mx-auto relative overflow-hidden">
+          <div class="relative z-10">
+            <h2 class="font-display font-bold text-display-sm md:text-display-md text-white mb-4">¿Listo para empezar tu transformación?</h2>
+            <p class="text-poker-gold-light text-body-lg mb-8 max-w-xl mx-auto">Únete a miles de jugadores que ya están dominando el poker profesional. Gratis, sin tarjeta, empieza ahora.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="/curso/fase-0/modulo-1/leccion-1" class="btn-gold btn-lg group">
+                <span>Empezar Fase 0 Gratis</span>
+              </a>
+              <a href="/herramientas/equity" class="btn-secondary btn-lg border-white/20 text-white hover:bg-white/10">Probar Equity Calculator</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

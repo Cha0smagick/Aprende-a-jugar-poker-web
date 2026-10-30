@@ -1,0 +1,279 @@
+---
+import LessonLayout from '@/layouts/LessonLayout.astro';
+---
+
+<LessonLayout 
+  title="Reglas Oficiales de Texas Hold'em"
+  description="Reglas completas TDA 2024: baraja, reparto, apuestas, showdown, irregularidades. Base obligatoria para todo jugador."
+  phaseTitle="Fase 0: Fundamentos"
+  phaseRoute="/curso/fase-0"
+  moduleTitle="Módulo 1: Reglas y Mecánicas"
+  moduleRoute="/curso/fase-0/modulo-1"
+  phaseColor="green"
+  phaseBadge="Novato"
+  moduleNumber={1}
+  difficulty="beginner"
+  difficultyLabel="Principiante"
+  duration="25 min"
+  canonical="/curso/fase-0/modulo-1/leccion-1"
+  schema={{
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Reglas Oficiales de Texas Hold'em",
+    "description": "Reglas completas TDA 2024 para Texas Hold'em. Parte del curso Poker Mastery.",
+    "educationalLevel": "Beginner",
+    "teaches": ["Reglas de poker", "Texas Hold'em", "Estructura de apuestas", "Showdown"],
+    "timeRequired": "PT25M",
+    "isPartOf": { "@type": "Course", "name": "Poker Mastery - Curso Completo" }
+  }}
+>
+  <slot name="content">
+    
+    ## Introducción
+
+    Texas Hold'em es la variante de poker más jugada del mundo. Su elegancia radica en reglas simples que generan una profundidad estratégica infinita. **Este es el fundamento sobre el que construirás todo tu juego futuro.**
+
+    > **Consejo Pro**: Muchos jugadores "experimentados" tienen gaps en las reglas básicas que les cuestan dinero real. No saltes esta lección.
+
+    ---
+
+    ## 1. Componentes del Juego
+
+    ### La Baraja
+    - **52 cartas** estándar (sin comodines)
+    - 4 palos: ♠ **Picas** (Spades), ♥ **Corazones** (Hearts), ♦ **Diamantes** (Diamonds), ♣ **Tréboles** (Clubs)
+    - 13 rangos por palo: A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2
+    - **El As** puede ser la carta más alta (A-K-Q-J-T) o la más baja (5-4-3-2-A) para escaleras
+
+    ### Las Fichas (Chips)
+    Representan dinero real (cash) o puntos de torneo (tournament chips).
+    - **Cash Game**: 1 ficha = valor monetario real (ej. $1, $5, $25, $100)
+    - **Torneo**: Fichas sin valor monetario, solo determinan puesto final
+
+    ### La Mesa
+    - **2-10 jugadores** (6-max o 9-max/10-max son estándar)
+    - **Botón del Dealer (Button)**: Indica posición teórica del repartidor
+    - **Small Blind (SB)** y **Big Blind (BB)**: Apuestas forzadas a la izquierda del botón
+
+    ---
+
+    ## 2. Flujo de una Mano Completa
+
+    <div class="mermaid-wrapper">
+    <pre class="mermaid-diagram">
+INICIO MANO
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ PRE-FLOP                            │
+│ • Reparto 2 cartas privadas (hole)  │
+│ • Primera ronda apuestas            │
+│   (empieza UTG, termina BB)         │
+└─────────────────────────────────────┘
+    │
+    ▼ (si ≥2 jugadores quedan)
+┌─────────────────────────────────────┐
+│ FLOP                                │
+│ • Quema 1 carta (burn)              │
+│ • Reparto 3 cartas comunitarias     │
+│ • Segunda ronda apuestas            │
+│   (empieza SB, termina BTN)         │
+└─────────────────────────────────────┘
+    │
+    ▼ (si ≥2 jugadores quedan)
+┌─────────────────────────────────────┐
+│ TURN (4ª calle)                     │
+│ • Quema 1 carta                     │
+│ • Reparto 1 carta comunitaria       │
+│ • Tercera ronda apuestas            │
+└─────────────────────────────────────┘
+    │
+    ▼ (si ≥2 jugadores quedan)
+┌─────────────────────────────────────┐
+│ RIVER (5ª calle)                    │
+│ • Quema 1 carta                     │
+│ • Reparto 1 carta comunitaria       │
+│ • Cuarta ronda apuestas             │
+└─────────────────────────────────────┘
+    │
+    ▼ (si ≥2 jugadores quedan)
+┌─────────────────────────────────────┐
+│ SHOWDOWN                            │
+│ • Revelan cartas los jugadores      │
+│   que llegaron al final             │
+│ • Gana la mejor mano de 5 cartas    │
+└─────────────────────────────────────┘
+    │
+    ▼
+FIN MANO → Botón mueve una posición → Nueva mano
+</pre>
+    </div>
+
+    ---
+
+    ## 3. El Reparto (Deal)
+
+    1. **Barajado y corte**: El dealer baraja, jugador a su derecha corta
+    2. **Reparto de hole cards**: 1 carta a cada jugador en sentido horario, 2 vueltas = 2 cartas cada uno
+    3. **Cartas boca abajo**: Siempre mantenidas ocultas, solo el dueño las ve
+    4. **Protección de cartas**: Poner una ficha o protector encima = "estas cartas están en juego"
+
+    > **Regla de Oro**: Si tus cartas tocan el muck (pila de descartes) sin protegerlas, **están muertas**. No hay excepciones.
+
+    ---
+
+    ## 4. Rondas de Apuestas (Betting Rounds)
+
+    ### Orden de Acción
+    | Ronda | Primer en actuar | Último en actuar |
+    |-------|------------------|------------------|
+    | **Pre-flop** | UTG (Under The Gun) | Big Blind |
+    | **Post-flop** | Small Blind (si está en mano) | Botón (Button) |
+
+    ### Acciones Legales
+    - **Check**: Pasar acción sin apostar (solo si no hay apuesta previa)
+    - **Bet**: Apostar fichas (mínimo = Big Blind)
+    - **Call**: Igualar la apuesta actual
+    - **Raise**: Aumentar la apuesta (mínimo = tamaño del raise anterior)
+    - **Fold**: Tirar cartas, renunciar al pozo
+    - **All-in**: Apostar todas tus fichas restantes
+
+    ### Límites de Apuesta
+    - **No-Limit (NL)**: Cualquier cantidad ≥ BB hasta tu stack completo
+    - **Pot-Limit (PL)**: Máximo = tamaño actual del pozo
+    - **Fixed-Limit (FL)**: Tamaños fijos por calle (ej. $2/$4)
+
+    ---
+
+    ## 5. Showdown: "Las Cartas Hablan"
+
+    ### Reglas Fundamentales
+    1. **Mejor mano de 5 cartas** gana (usando 0, 1 o 2 hole cards + 5, 4 o 3 comunitarias)
+    2. **Orden de showdown**: Último agresor (último bet/raise en river) muestra primero
+    3. **Si no hubo apuesta en river**: Primer jugador a la izquierda del botón muestra primero
+    4. **Cartas hablan**: La declaración verbal NO anula las cartas reales
+    5. **Mano muerta**: Si tiras cartas al muck antes de showdown, pierdes el derecho al pozo
+
+    ### Empates (Split Pot)
+    - Si dos o más jugadores tienen **exactamente la misma mano de 5 cartas**, se reparte el pozo equitativamente
+    - La **6ª y 7ª carta NUNCA cuentan** para desempatar
+    - Ejemplo: Mesa A♠ K♠ Q♠ J♠ T♠ → Todos tienen Escalera Real → Split pot
+
+    ---
+
+    ## 6. Reglas TDA 2024 Clave (Resumen)
+
+    <div class="table-wrapper">
+    | Regla | Descripción | Consecuencia |
+    |-------|-------------|--------------|
+    | **String Bet** | Una apuesta debe ser un solo movimiento o declaración verbal clara | "Call... and raise" = solo call |
+    | **Act Out of Turn** | Acción fuera de turno puede ser vinculante si no cambia la acción posterior | Depende de la acción posterior |
+    | **Oversized Chip** | Ficha grande sin declaración = call | Ficha $100 en apuesta $25 = call $25 |
+    | **Mucked Hands** | Cartas en muck = muertas | No se pueden recuperar ni ver |
+    | **Show One, Show All** | Si muestras una carta a un jugador, debes mostrarla a todos | Obligatorio mostrar a la mesa |
+    | **Rabbit Hunting** | Prohibido pedir ver cartas que "habrían salido" | Penalización / Warning |
+    </div>
+
+    ---
+
+    ## 7. Diferencias Cash Game vs Torneo
+
+    <div class="table-wrapper">
+    | Aspecto | Cash Game | Torneo |
+    |---------|-----------|--------|
+    | **Rebuy/Add-on** | Siempre (entre manos) | Solo periodo inicial |
+    | **All-in** | Ganas solo lo que cubres (side pots) | Mismo, pero fichas = vida |
+    | **Blinds** | Constantes | Suben cada nivel (15-20 min) |
+    | **Antes** | Raro (high stakes) | Comunes desde medio torneo |
+    | **Fin de juego** | Te levantas cuando quieras | Hasta un ganador (o chop) |
+    </div>
+
+    ---
+
+    ## 8. Ejemplo Práctico: Mano Completa
+
+    **Situación**: NLHE $1/$2, 6 jugadores, stacks $200 efectivos
+
+    > **Pre-flop** ($3 pozo: SB $1 + BB $2)
+    > - UTG: Fold
+    > - MP: Raise a $6
+    > - CO: Call $6
+    > - BTN: Fold
+    > - SB: Fold
+    > - BB: Call $4 más (total $6)
+    > - **Pozo: $19**
+
+    > **Flop**: K♥ 7♠ 2♦ ($19 pozo)
+    > - BB: Check
+    > - MP: Bet $12
+    > - CO: Fold
+    > - BB: Call $12
+    > - **Pozo: $43**
+
+    > **Turn**: 9♣ ($43 pozo)
+    > - BB: Check
+    > - MP: Bet $30
+    > - BB: Call $30
+    > - **Pozo: $103**
+
+    > **River**: 3♥ ($103 pozo)
+    > - BB: Check
+    > - MP: Bet $70
+    > - BB: Call $70
+    > - **Showdown**: MP muestra K♣ K♦ (Trío de Reyes), BB muestra A♥ K♥ (Top pair, As kicker)
+    > - **Gana MP** con trío → Recoge $243
+
+    ---
+
+    ## 9. Fórmulas Clave
+
+    **Cálculo del Pozo Básico:**
+    `P_total = sum(i=1 to n) Apuesta_i + DeadMoney`
+
+    Donde:
+    - `P_total` = Pozo total al final de la mano
+    - `Apuesta_i` = Cantidad que puso cada jugador i
+    - `DeadMoney` = Dinero de jugadores que foldearon (blinds, antes, apuestas previas)
+
+    **Pot Odds Básicos:**
+    `PotOdds = (Tamaño del Pozo) / (Apuesta a Igualar) = P / B`
+
+    > **Hover sobre cada variable** para ver su definición. **Click en "Ejemplo"** para abrir la calculadora con esta fórmula pre-cargada.
+
+    ---
+
+    ## 10. Quiz de Verificación
+
+    <div data-interactive="quiz" data-config='{"questions":[{"question":"En NLHE $2/$5, UTG abre a $15. MP hace 3-bet a $45. CO hace 4-bet a $120. BTN foldea. SB foldea. BB hace 5-bet all-in por $300 total. UTG foldea. MP foldea. CO llama. ¿Cuánto gana CO si gana la mano?","options":["$600 (todo el pozo)","$420 (su apuesta + la de BB + dead money)","$300 (solo lo que BB puso)","$450 (main pot + side pot)"],"answer":0,"explanation":"Pozo total = UTG $15 + MP $45 + CO $300 + BB $300 + SB $5 = $965. CO y BB van a showdown. CO gana el pozo completo de $965."},{"question":"En showdown, el último agresor en el river muestra sus cartas primero. Si no hubo apuesta en el river, ¿quién muestra primero?","options":["El botón (Button)","El Small Blind (si está en la mano)","El primer jugador a la izquierda del botón que sigue en la mano","El jugador con la mejor mano visible"],"answer":2,"explanation":"Regla TDA 2024: Si no hubo apuesta en la última ronda (river), el orden de showdown es posición normal post-flop: el primer jugador a la izquierda del botón que aún tiene cartas vivas muestra primero."},{"question":"Tienes A♠ K♠. Mesa: K♥ 7♦ 2♣ 9♠ 3♥. Tu oponente muestra K♣ Q♣. ¿Quién gana?","options":["Tú (As kicker)","Oponente (Reina kicker)","Split pot (empate)","Depende de quién apostó último"],"answer":0,"explanation":"Tu mano: K♠ K♥ A♠ 9♠ 7♦ (Par de Reyes, As kicker). Oponente: K♣ K♥ Q♣ 9♠ 7♦ (Par de Reyes, Reina kicker). Ganas tú porque tu As vence a su Reina como kicker."}]}'></div>
+
+    ---
+
+    ## 11. Resumen y Próximos Pasos
+
+    ### Puntos Clave para Memorizar
+    - ✅ 52 cartas, 2 hole cards, 5 comunitarias, mejor mano de 5 gana
+    - ✅ Orden pre-flop: UTG → BB | Post-flop: SB → BTN
+    - ✅ Acciones: Check, Bet, Call, Raise, Fold, All-in
+    - ✅ **Cartas hablan** > Declaración verbal
+    - ✅ Proteger tus cartas siempre (ficha encima)
+    - ✅ String bet = solo call | Oversized chip sin declarar = call
+
+    ### Tu Tarea Antes de la Siguiente Lección
+    1. **Memoriza el orden de posiciones** (UTG, MP, CO, BTN, SB, BB) - usa el Position Trainer
+    2. **Juega 10 manos** en el simulador gratuito aplicando solo lo aprendido hoy
+    3. **Descarga el PDF "Reglas Quick Reference"** y tenlo a mano
+
+    ### Siguiente Lección
+    **Lección 2**: Estructura de Apuestas - Blinds, Antes, Straddle, Bring-in, y cómo afectan tus rangos y EV.
+
+    ---
+
+    ## Recursos Adicionales
+
+    - [TDA Rules 2024 (Official)](https://www.pokertda.com/rules) - Reglas oficiales de torneo
+    - [Robert's Rules of Poker](https://www.poker.coach/roberts-rules) - Referencia clásica
+    - [WSOP Live Action Rules](https://www.wsop.com/2024/rules/) - Reglas de la World Series of Poker
+    - **PDF Descargable**: [Reglas Quick Reference](/assets/downloads/reglas-quickref.pdf) - Imprimible A4
+
+  </slot>
+</LessonLayout>

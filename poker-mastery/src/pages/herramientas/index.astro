@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Herramientas de Poker - Poker Mastery" description="20+ calculadoras y trainers profesionales: Equity, Pot Odds, ICM, EV, Range Builder, Bankroll, Flop Analyzer, Hand Replayer. Gratis, offline, sin límites." canonical="/herramientas">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          20+ Herramientas · Gratis · Offline · Sin límites
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">Herramientas Profesionales<br /><span class="text-gradient-gold">Nivel Pro</span></h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Las mismas calculadoras y trainers que usan los profesionales. Monte Carlo, GTO baselines, spaced repetition, análisis de texturas, ICM preciso. Todo en tu navegador, gratis para siempre.</p>
+        <div class="flex flex-wrap items-center justify-center gap-4"><a href="/herramientas/equity" class="btn-primary btn-lg">Probar Equity Calculator</a><a href="/herramientas/trainers" class="btn-secondary btn-lg">Ver Trainers</a></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Calculadoras Core</h2>
+          <p class="text-body-lg text-text-secondary">Las 12 calculadoras esenciales para cualquier jugador serio.</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="calculators-grid"></div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Trainers Gamificados</h2>
+          <p class="text-body-lg text-text-secondary">Entrena tu intuición con spaced repetition y feedback GTO instantáneo.</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="trainers-grid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Herramientas de Análisis</h2>
+          <p class="text-body-lg text-text-secondary">Para estudio profundo y revisión de sesiones.</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="analysis-grid"></div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Demo: Equity Calculator</h2>
+          <p class="text-body-lg text-text-secondary">Prueba la calculadora más usada por los pros directamente aquí.</p>
+        </header>
+        <div class="card p-6 md:p-8 max-w-4xl mx-auto" id="equity-demo"><iframe src="/herramientas/equity?embed=true" class="w-full" style="height: 600px; border: none; border-radius: 12px;" title="Equity Calculator Demo"></iframe></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide text-center">
+        <div class="felt-bg rounded-2xl p-8 md:p-16 max-w-3xl mx-auto">
+          <h2 class="font-display font-bold text-display-sm md:text-display-md text-white mb-4">¿Listo para subir de nivel?</h2>
+          <p class="text-poker-gold-light text-body-lg mb-8">Todas las herramientas son gratis, open source y funcionan offline. Úsalas en tus sesiones, estúdialas, másteralas.</p>
+          <a href="/curso" class="btn-gold btn-lg">Ver Curso Completo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

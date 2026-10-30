@@ -1,0 +1,337 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Verificar Diploma - Poker Mastery" description="Verifica la autenticidad de cualquier diploma de Poker Mastery. Introduce el hash o escanea el código QR." canonical="/diplomas">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <!-- Hero -->
+    <section class="section text-center">
+      <div class="container-wide">
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">
+          Verificar Diploma
+        </h1>
+        <p class="text-body-lg text-text-secondary max-w-2xl mx-auto mb-8">
+          Introduce el código hash del diploma o escanea el código QR para verificar su autenticidad. 
+          Todos los diplomas tienen un hash SHA-256 único e inmutable.
+        </p>
+
+        <div class="max-w-md mx-auto">
+          <div class="card p-6 md:p-8">
+            <div class="flex flex-col sm:flex-row gap-3 mb-4">
+              <input 
+                type="text" 
+                id="diploma-hash" 
+                class="flex-1 font-mono text-center text-lg px-4 py-3 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted focus:border-poker-gold focus:ring-2 focus:ring-poker-gold/20 focus:outline-none"
+                placeholder="Ej: A1B2C3D4E5F6"
+                maxlength="12"
+                autocomplete="off"
+                aria-label="Hash del diploma"
+              />
+              <button id="verify-btn" class="btn-primary whitespace-nowrap">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Verificar
+              </button>
+            </div>
+            <p class="text-sm text-text-muted text-center">O arrastra una imagen del diploma aquí para leer el QR automáticamente</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result Area -->
+    <section class="section bg-bg-secondary border-y border-border-default" id="result-section" style="display: none;">
+      <div class="container-wide">
+        <div class="max-w-3xl mx-auto">
+          <div id="verification-result" class="card p-6 md:p-8"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sample Diplomas -->
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Ejemplos de Diplomas</h2>
+          <p class="text-body-lg text-text-secondary">Diplomas de muestra para probar la verificación.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="sample-diplomas">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Cómo Funciona la Verificación</h2>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="card p-6 text-center">
+            <div class="w-14 h-14 rounded-xl bg-poker-felt/10 flex items-center justify-center mx-auto mb-4 text-3xl">1️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Hash Único</h3>
+            <p class="text-text-secondary">Cada diploma genera un hash SHA-256 basado en: nombre, curso, fecha, puntuación. Inmutable.</p>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="w-14 h-14 rounded-xl bg-poker-gold/10 flex items-center justify-center mx-auto mb-4 text-3xl">2️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">QR Code</h3>
+            <p class="text-text-secondary">El diploma incluye un código QR que enlaza directamente a esta página con el hash pre-cargado.</p>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="w-14 h-14 rounded-xl bg-success/10 flex items-center justify-center mx-auto mb-4 text-3xl">3️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Verificación Pública</h3>
+            <p class="text-text-secondary">Cualquiera puede verificar sin cuenta. Muestra: nombre (opcional), curso, fecha, score, hash.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diploma Types -->
+    <section class="section">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Tipos de Diplomas</h2>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-xl">📄</div>
+              <div>
+                <h3 class="font-semibold text-heading-md text-text-primary">Diploma de Módulo</h3>
+                <p class="text-text-sm text-text-muted">100% lecciones + examen ≥ 80%</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-sm text-text-secondary">
+              <li>✓ Hash SHA-256 único</li>
+              <li>✓ Código QR</li>
+              <li>✓ PDF descargable</li>
+              <li>✓ 25 disponibles</li>
+            </ul>
+          </div>
+          <div class="card p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-xl">🏅</div>
+              <div>
+                <h3 class="font-semibold text-heading-md text-text-primary">Diploma de Fase</h3>
+                <p class="text-text-sm text-text-muted">Todos los módulos + examen integrador ≥ 85%</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-sm text-text-secondary">
+              <li>✓ Diseño premium foil</li>
+              <li>✓ Blockchain anchor (opcional)</li>
+              <li>✓ 6 disponibles</li>
+              <li>✓ Perfil público</li>
+            </ul>
+          </div>
+          <div class="card p-6 gradient-border">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-poker-gold to-poker-gold-light flex items-center justify-center text-xl">🏆</div>
+              <div>
+                <h3 class="font-semibold text-heading-md text-text-primary">Master Poker Strategist</h3>
+                <p class="text-text-sm text-text-muted">Curso completo + examen final ≥ 90% + proyecto</p>
+              </div>
+            </div>
+            <ul class="space-y-2 text-sm text-text-secondary">
+              <li>✓ Certificación máxima</li>
+              <li>✓ Acceso alumni exclusivo</li>
+              <li>✓ Coaching grupal incluido</li>
+              <li>✓ Único por alumno</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initVerification();
+    renderSamples();
+  });
+
+  const SAMPLE_DIPLOMAS = [
+    { hash: 'A1B2C3D4E5F6', name: 'Juan Pérez', type: 'module', title: 'Módulo 1: Reglas y Mecánicas', date: '2026-10-15', score: 92, phase: 0 },
+    { hash: 'F7E8D9C0B1A2', name: 'María García', type: 'phase', title: 'Fase 0: Fundamentos Absolutos', date: '2026-11-03', score: 88, phase: 0 },
+    { hash: 'Z9Y8X7W6V5U4', name: 'Carlos López', type: 'course', title: 'Master Poker Strategist', date: '2026-12-20', score: 96, phase: 5 },
+  ];
+
+  function renderSamples() {
+    const grid = document.getElementById('sample-diplomas');
+    if (!grid) return;
+    grid.innerHTML = SAMPLE_DIPLOMAS.map(d => `
+      <div class="card p-4 cursor-pointer hover:border-poker-gold transition-colors" onclick="verifyHash('${d.hash}')">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="badge badge-${d.type === 'course' ? 'gold' : d.type === 'phase' ? 'info' : 'success'}">${d.type === 'course' ? 'Curso Completo' : d.type === 'phase' ? 'Fase' : 'Módulo'}</span>
+        </div>
+        <h4 class="font-semibold text-text-primary mb-1">${d.title}</h4>
+        <p class="text-sm text-text-muted mb-2">${d.name}</p>
+        <div class="flex items-center justify-between text-xs text-text-muted">
+          <span>${d.date}</span>
+          <span class="font-mono">${d.hash}</span>
+        </div>
+        <div class="mt-2 pt-2 border-t border-border-default flex items-center justify-between">
+          <span class="badge badge-success">${d.score}%</span>
+          <button class="btn-secondary btn-sm text-xs">Verificar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function initVerification() {
+    const input = document.getElementById('diploma-hash') as HTMLInputElement;
+    const btn = document.getElementById('verify-btn') as HTMLButtonElement;
+    const resultSection = document.getElementById('result-section') as HTMLElement;
+    const resultDiv = document.getElementById('verification-result') as HTMLElement;
+
+    function verify() {
+      const hash = input.value.trim().toUpperCase();
+      if (!hash) {
+        showToast('Introduce un hash', 'warning');
+        return;
+      }
+      
+      if (hash.length !== 12) {
+        showToast('El hash debe tener 12 caracteres', 'warning');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-sm"></span> Verificando...';
+
+      setTimeout(() => {
+        const diploma = findDiploma(hash);
+        resultSection.style.display = 'block';
+        resultDiv.innerHTML = renderResult(diploma, hash);
+        btn.disabled = false;
+        btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Verificar';
+        
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 800);
+    }
+
+    btn?.addEventListener('click', verify);
+    input?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') verify();
+    });
+
+    input?.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      target.value = target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    });
+  }
+
+  function findDiploma(hash: string) {
+    return SAMPLE_DIPLOMAS.find(d => d.hash === hash) || null;
+  }
+
+  function renderResult(diploma: any, hash: string) {
+    if (!diploma) {
+      return `
+        <div class="text-center py-12">
+          <div class="w-16 h-16 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-4 text-error text-3xl">✗</div>
+          <h3 class="font-semibold text-heading-lg text-text-primary mb-2">Diploma No Encontrado</h3>
+          <p class="text-text-secondary mb-4">El hash <code class="font-mono bg-bg-tertiary px-2 py-1 rounded">${hash}</code> no existe en nuestra base de datos.</p>
+          <div class="text-sm text-text-muted">
+            Posibles causas: hash incorrecto, diploma no emitido aún, o base de datos no sincronizada.
+          </div>
+        </div>
+      `;
+    }
+
+    const typeLabels = { module: 'Módulo', phase: 'Fase', course: 'Curso Completo' };
+    const typeColors = { module: 'success', phase: 'info', course: 'gold' };
+    const typeIcons = { module: '📄', phase: '🏅', course: '🏆' };
+
+    return `
+      <div class="text-center">
+        <div class="w-16 h-16 rounded-full bg-${typeColors[diploma.type]}/10 flex items-center justify-center mx-auto mb-4 text-${typeColors[diploma.type]} text-3xl">${typeIcons[diploma.type]}</div>
+        <h3 class="font-semibold text-heading-lg text-text-primary mb-1">¡Diploma Verificado!</h3>
+        <p class="text-text-secondary mb-6">El hash <code class="font-mono bg-bg-tertiary px-2 py-1 rounded">${hash}</code> es válido y auténtico.</p>
+        
+        <div class="diploma-preview bg-bg-tertiary rounded-xl p-6 mb-6 text-left">
+          <div class="flex items-center justify-between mb-4">
+            <span class="badge badge-${typeColors[diploma.type]}">${typeLabels[diploma.type]}</span>
+            <span class="text-sm text-text-muted">${diploma.date}</span>
+          </div>
+          <h4 class="font-display font-bold text-heading-xl text-text-primary mb-2">${diploma.title}</h4>
+          <div class="flex items-center justify-between text-sm text-text-muted mb-4">
+            <span>Alumno: <strong class="text-text-primary">${diploma.name}</strong></span>
+            <span>Puntuación: <strong class="text-${typeColors[diploma.type]}">${diploma.score}%</strong></span>
+          </div>
+          <div class="pt-4 border-t border-border-default flex items-center justify-between">
+            <code class="font-mono text-xs text-text-muted">${hash}</code>
+            <span class="badge badge-${typeColors[diploma.type]} text-xs">VERIFICADO</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 justify-center">
+          <button class="btn-secondary btn-sm" onclick="downloadPDF('${hash}')">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Descargar PDF
+          </button>
+          <button class="btn-primary btn-sm" onclick="shareDiploma('${hash}')">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Compartir
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function verifyHash(hash: string) {
+    const input = document.getElementById('diploma-hash') as HTMLInputElement;
+    input.value = hash;
+    (document.getElementById('verify-btn') as HTMLButtonElement).click();
+  }
+
+  function downloadPDF(hash: string) {
+    showToast('Generando PDF...', 'info');
+    setTimeout(() => showToast('PDF descargado (demo)', 'success'), 1000);
+  }
+
+  function shareDiploma(hash: string) {
+    const url = `${window.location.origin}/diplomas?hash=${hash}`;
+    if (navigator.share) {
+      navigator.share({ title: 'Mi Diploma Poker Mastery', url });
+    } else {
+      navigator.clipboard.writeText(url);
+      showToast('Enlace copiado al portapapeles', 'success');
+    }
+  }
+
+  function showToast(message: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
+    if (window.showToast) {
+      window.showToast(message, type);
+    } else {
+      const container = document.getElementById('toasts');
+      if (!container) return;
+      
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto animate-slide-up px-4 py-3 rounded-lg shadow-elevated max-w-sm ${
+        type === 'success' ? 'bg-success text-white' :
+        type === 'error' ? 'bg-error text-white' :
+        type === 'warning' ? 'bg-warning text-white' :
+        'bg-info text-white'
+      }`;
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'polite');
+      toast.textContent = message;
+  
+      container.appendChild(toast);
+  
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s ease-in forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
+    }
+  }
+</script>
