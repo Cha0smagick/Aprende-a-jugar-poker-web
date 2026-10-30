@@ -1,0 +1,323 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="ICM Calculator - Poker Mastery" description="Calculadora ICM profesional: Chip EV → $EV, Bubble Factor, Risk Premium. Tournament simulator incluido. Gratis, offline." canonical="/herramientas/icm">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          Herramienta Profesional · Gratis · Offline
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">ICM Calculator</h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Independent Chip Model: convierte chips en $EV real. Bubble Factor, Risk Premium, simulador de torneos. Esencial para MTTs y SNGs.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide max-w-4xl mx-auto">
+        <div class="card p-6 md:p-8 space-y-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Configuración del Torneo</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Prizepool Total ($)</label>
+                  <input type="number" id="prizepool" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="10000" step="1" min="0" />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-text-secondary mb-1">1er Premio ($)</label>
+                    <input type="number" id="prize1" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="5000" step="1" min="0" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-text-secondary mb-1">2do Premio ($)</label>
+                    <input type="number" id="prize2" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="3000" step="1" min="0" />
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-text-secondary mb-1">3er Premio ($)</label>
+                    <input type="number" id="prize3" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="2000" step="1" min="0" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-text-secondary mb-1">Jugadores Restantes</label>
+                    <input type="number" id="players-left" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="6" step="1" min="2" max="20" />
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Stacks de Jugadores (chips)</h3>
+              <div id="stacks-container" class="space-y-2">
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 1 (Tú)" value="Hero" readonly />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="500000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 2" value="Villain 1" />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="400000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 3" value="Villain 2" />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="300000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 4" value="Villain 3" />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="250000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 5" value="Villain 4" />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="150000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 items-center">
+                  <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador 6" value="Villain 5" />
+                  <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="100000" min="0" step="1000" />
+                  <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+                </div>
+              </div>
+              <button id="add-stack" class="btn-secondary btn-sm mt-2">+ Añadir Jugador</button>
+              <button id="calculate-icm" class="w-full btn-primary mt-4">Calcular ICM</button>
+            </div>
+
+            <div class="border-t border-border-default pt-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Resultados ICM</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm" id="icm-results">
+                  <thead>
+                    <tr class="border-b border-border-default">
+                      <th class="text-left p-2 font-semibold text-text-primary">Jugador</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">Chips</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">% Chips</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">$EV (ICM)</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">Chip EV ($)</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">Diff ($)</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">Bubble Factor</th>
+                      <th class="text-left p-2 font-semibold text-text-primary">Risk Premium</th>
+                    </tr>
+                  </thead>
+                  <tbody id="icm-body"></tbody>
+                </table>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="summary-cards"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-border-default pt-6">
+          <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Fórmulas ICM (LaTeX)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>Probabilidad 1er Lugar:</strong>
+              <div class="formula-render mt-2" data-formula="P_1(i) = \\frac{\\text{chips}_i}{\\sum \\text{chips}}"></div>
+            </div>
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>Probabilidad 2do Lugar:</strong>
+              <div class="formula-render mt-2" data-formula="P_2(i) = \\sum_{j \\neq i} P_1(j) \\times \\frac{\\text{chips}_i}{\\text{total} - \\text{chips}_j}"></div>
+            </div>
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>$EV (ICM):</strong>
+              <div class="formula-render mt-2" data-formula="\\$EV_i = \\sum_k P_k(i) \\times \\text{premio}_k"></div>
+            </div>
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>Chip EV ($):</strong>
+              <div class="formula-render mt-2" data-formula="\\text{Chip EV}_i = \\frac{\\text{chips}_i}{\\text{total chips}} \\times \\text{prizepool}"></div>
+            </div>
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>Bubble Factor:</strong>
+              <div class="formula-render mt-2" data-formula="BF = \\frac{\\% \\text{equity needed vs chip EV}}{\\% \\text{equity needed vs \$EV}}"></div>
+            </div>
+            <div class="bg-bg-tertiary p-4 rounded-lg">
+              <strong>Risk Premium:</strong>
+              <div class="formula-render mt-2" data-formula="RP = \\frac{\\$EV_{\\text{call}} - \\$EV_{\\text{fold}}}{\\text{pot odds}}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide text-center">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Más Herramientas</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/herramientas/equity" class="btn-secondary">Equity Calculator</a>
+          <a href="/herramientas/pot-odds" class="btn-secondary">Pot Odds / MDF</a>
+          <a href="/herramientas/range-builder" class="btn-secondary">Range Builder</a>
+          <a href="/herramientas/trainers" class="btn-secondary">Trainers</a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function renderFormulas() {
+        if (window.renderMathInElement && typeof window.renderMathInElement === 'function') {
+          document.querySelectorAll('.formula-render').forEach((el: Element) => {
+            const latex = (el as HTMLElement).getAttribute('data-formula') || (el as HTMLElement).textContent || '';
+            if (latex) {
+              (el as HTMLElement).textContent = '$$ ' + latex + ' $$';
+              window.renderMathInElement(el as HTMLElement, {
+                delimiters: [
+                  {left: '$$', right: '$$', display: true},
+                  {left: '$', right: '$', display: false},
+                ],
+                throwOnError: false,
+              });
+            }
+          });
+        }
+      }
+
+      function removeStack(btn: HTMLButtonElement) {
+        const container = document.getElementById('stacks-container');
+        if (!container) return;
+        const rows = container.querySelectorAll('.grid');
+        if (rows.length > 2) {
+          btn.closest('.grid')?.remove();
+        }
+      }
+
+      document.getElementById('add-stack')?.addEventListener('click', () => {
+        const container = document.getElementById('stacks-container');
+        if (!container) return;
+        const count = container.querySelectorAll('.grid').length + 1;
+        const div = document.createElement('div');
+        div.className = 'grid grid-cols-4 gap-2 items-center';
+        div.innerHTML = `
+          <input type="text" class="col-span-2 px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" placeholder="Jugador ${count}" value="Jugador ${count}" />
+          <input type="number" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="100000" min="0" step="1000" />
+          <button class="btn-secondary btn-sm" onclick="removeStack(this)">Eliminar</button>
+        `;
+        container.appendChild(div);
+      });
+
+      function calculateICM(stacks: number[], prizes: number[]) {
+        const n = stacks.length;
+        const totalChips = stacks.reduce((a: number, b: number) => a + b, 0);
+
+        function calcEquity(player: number, place: number, remainingPlayers: number[], remainingChips: number): number {
+          if (place === 0) return 1;
+          if (remainingPlayers.length === 1) return place === 1 ? 1 : 0;
+
+          let prob = 0;
+          for (let i = 0; i < remainingPlayers.length; i++) {
+            const p = remainingPlayers[i];
+            const pChips = stacks[p];
+            const probWin = pChips / remainingChips;
+            const newRemaining = remainingPlayers.filter((x: number) => x !== p);
+            const newChips = remainingChips - pChips;
+            prob += probWin * calcEquity(player, place - 1, newRemaining, newChips);
+          }
+          return prob;
+        }
+
+        const players = Array.from({ length: n }, (_, i) => i);
+        const results = [];
+
+        for (let i = 0; i < n; i++) {
+          let ev = 0;
+          for (let place = 1; place <= Math.min(prizes.length, n); place++) {
+            const prob = calcEquity(i, place, players, totalChips);
+            ev += prob * (prizes[place - 1] || 0);
+          }
+          const chipEV = (stacks[i] / totalChips) * prizes.reduce((a: number, b: number) => a + b, 0);
+          results.push({
+            chips: stacks[i],
+            chipPct: (stacks[i] / totalChips * 100).toFixed(1),
+            icmEV: ev,
+            chipEV: chipEV,
+            diff: ev - chipEV,
+          });
+        }
+        return results;
+      }
+
+      document.getElementById('calculate-icm')?.addEventListener('click', () => {
+        const prizepoolInput = document.getElementById('prizepool') as HTMLInputElement | null;
+        const prize1Input = document.getElementById('prize1') as HTMLInputElement | null;
+        const prize2Input = document.getElementById('prize2') as HTMLInputElement | null;
+        const prize3Input = document.getElementById('prize3') as HTMLInputElement | null;
+
+        if (!prizepoolInput || !prize1Input || !prize2Input || !prize3Input) return;
+
+        const prizes = [
+          parseFloat(prize1Input.value) || 0,
+          parseFloat(prize2Input.value) || 0,
+          parseFloat(prize3Input.value) || 0,
+        ].filter(p => p > 0);
+
+        const rows = document.querySelectorAll('#stacks-container .grid');
+        const stacks: number[] = [];
+        const names: string[] = [];
+        rows.forEach(row => {
+          const inputs = row.querySelectorAll('input');
+          names.push((inputs[0] as HTMLInputElement).value);
+          stacks.push(parseFloat((inputs[1] as HTMLInputElement).value) || 0);
+        });
+
+        const results = calculateICM(stacks, prizes);
+        const tbody = document.getElementById('icm-body');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const summaryCards = document.getElementById('summary-cards');
+        if (summaryCards) summaryCards.innerHTML = '';
+
+        results.forEach((r, i) => {
+          const bubbleFactor = r.chipEV > 0 ? r.icmEV / r.chipEV : 1;
+          const riskPremium = ((r.icmEV - r.chipEV) / r.chipEV * 100).toFixed(1);
+
+          const tr = document.createElement('tr');
+          tr.className = i === 0 ? 'bg-poker-gold/10' : '';
+          tr.innerHTML = `
+            <td class="p-2 font-medium ${i === 0 ? 'text-poker-gold' : ''}">${names[i]}${i === 0 ? ' (Tú)' : ''}</td>
+            <td class="p-2 font-mono">${r.chips.toLocaleString()}</td>
+            <td class="p-2">${r.chipPct}%</td>
+            <td class="p-2 font-bold text-poker-gold">$${r.icmEV.toFixed(2)}</td>
+            <td class="p-2 font-mono text-text-secondary">$${r.chipEV.toFixed(2)}</td>
+            <td class="p-2 ${r.diff >= 0 ? 'text-success' : 'text-error'}">${r.diff >= 0 ? '+' : ''}$${r.diff.toFixed(2)}</td>
+            <td class="p-2">${bubbleFactor.toFixed(2)}</td>
+            <td class="p-2 ${parseFloat(riskPremium) >= 0 ? 'text-warning' : 'text-success'}">${parseFloat(riskPremium) >= 0 ? '+' : ''}${riskPremium}%</td>
+          `;
+          tbody.appendChild(tr);
+
+          const card = document.createElement('div');
+          card.className = `card p-4 ${i === 0 ? 'border-2 border-poker-gold' : ''}`;
+          card.innerHTML = `
+            <div class="font-semibold ${i === 0 ? 'text-poker-gold' : ''}">${names[i]}${i === 0 ? ' (Tú)' : ''}</div>
+            <div class="text-2xl font-display font-bold text-poker-gold mt-1">$${r.icmEV.toFixed(0)}</div>
+            <div class="text-xs text-text-muted">Chip EV: $${r.chipEV.toFixed(0)} | BF: ${(r.icmEV/r.chipEV).toFixed(2)}</div>
+          `;
+          document.getElementById('summary-cards')?.appendChild(card);
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.renderMathInElement && typeof window.renderMathInElement === 'function') {
+          document.querySelectorAll('.formula-render').forEach((el: Element) => {
+            const latex = (el as HTMLElement).getAttribute('data-formula') || (el as HTMLElement).textContent || '';
+            if (latex) {
+              (el as HTMLElement).textContent = '$$ ' + latex + ' $$';
+              window.renderMathInElement(el as HTMLElement, {
+                delimiters: [
+                  {left: '$$', right: '$$', display: true},
+                  {left: '$', right: '$', display: false},
+                ],
+                throwOnError: false,
+              });
+            }
+          });
+        }
+      });
+    </script>
+  </main>
+</BaseLayout>

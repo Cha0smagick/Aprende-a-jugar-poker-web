@@ -1,0 +1,462 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Range Builder - Poker Mastery" description="Range Builder visual e interactivo. GTO baselines, exploit adjustments, combo counter, export. Gratis, offline." canonical="/herramientas/range-builder">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          Herramienta Profesional · Gratis · Offline
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">Range Builder</h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Construye rangos visualmente en matriz 13×13. GTO baselines pre-cargados, ajustes exploitativos, combo counter en tiempo real, exporta a notación estándar.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div class="lg:col-span-3 space-y-6">
+            <div class="card p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display font-semibold text-heading-lg text-text-primary">Matriz de Rangos</h3>
+                <div class="flex items-center gap-2">
+                  <select id="preset-select" class="px-3 py-2 bg-bg-tertiary border border-border-default rounded-lg text-text-primary text-sm">
+                    <option value="custom">Rango Personalizado</option>
+                    <option value="utg-rfi">UTG RFI (12%)</option>
+                    <option value="mp-rfi">MP RFI (16%)</option>
+                    <option value="co-rfi">CO RFI (26%)</option>
+                    <option value="btn-rfi">BTN RFI (45%)</option>
+                    <option value="btn-3bet">BTN 3-bet vs CO (12%)</option>
+                    <option value="bb-3bet">BB 3-bet vs BTN (14%)</option>
+                    <option value="btn-4bet">BTN 4-bet (4%)</option>
+                    <option value="bb-call">BB Call vs BTN (30%)</option>
+                  </select>
+                  <button id="clear-range" class="btn-secondary btn-sm">Limpiar</button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse" id="range-matrix">
+                  <thead>
+                    <tr>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted"></th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">A</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">K</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">Q</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">J</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">T</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">9</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">8</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">7</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">6</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">5</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">4</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">3</th>
+                      <th class="w-10 text-center font-mono text-xs text-text-muted">2</th>
+                    </tr>
+                  </thead>
+                  <tbody id="matrix-body"></tbody>
+                </table>
+              </div>
+
+              <div class="flex items-center gap-4 mt-4 p-4 bg-bg-tertiary rounded-lg">
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" id="show-combos" checked class="w-4 h-4 accent-poker-gold" />
+                  <label for="show-combos" class="text-sm text-text-secondary">Mostrar combos por mano</label>
+                </div>
+                <div class="flex items-center gap-2 ml-auto">
+                  <span class="text-sm text-text-muted">Combos totales:</span>
+                  <span id="total-combos" class="font-display font-bold text-poker-gold">0</span>
+                  <span class="text-sm text-text-muted"> / 1326</span>
+                  <span class="text-sm text-text-muted"> | %:</span>
+                  <span id="total-pct" class="font-display font-bold text-poker-gold">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button id="export-notation" class="btn-primary">Exportar Notación</button>
+                <button id="export-pio" class="btn-secondary">Exportar PIO Solver</button>
+                <button id="export-flopzilla" class="btn-secondary">Exportar Flopzilla</button>
+              </div>
+              <textarea id="export-output" class="mt-4 w-full h-32 font-mono text-sm bg-bg-tertiary border border-border-default rounded-lg p-3 text-text-primary placeholder-text-muted" placeholder="La notación exportada aparecerá aquí..." readonly></textarea>
+            </div>
+          </div>
+
+          <div class="lg:col-span-1 space-y-6">
+            <div class="card p-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Leyenda</h3>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center gap-2"><div class="w-4 h-4 bg-poker-gold rounded"></div><span class="text-text-secondary">Seleccionado (Value)</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 bg-poker-gold/30 rounded border border-poker-gold"></div><span class="text-text-secondary">Seleccionado (Bluff)</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 bg-poker-red/30 rounded border border-poker-red"></div><span class="text-text-secondary">Eliminado (Blocker)</span></div>
+                <div class="flex items-center gap-2"><div class="w-4 h-4 bg-bg-tertiary rounded border border-border-default"></div><span class="text-text-secondary">No seleccionado</span></div>
+              </div>
+            </div>
+
+            <div class="card p-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Acciones</h3>
+              <div class="space-y-2">
+                <button id="action-value" class="w-full btn-secondary btn-sm justify-start">Click: Añadir Value (Verde)</button>
+                <button id="action-bluff" class="w-full btn-secondary btn-sm justify-start">Shift+Click: Añadir Bluff (Amarillo)</button>
+                <button id="action-remove" class="w-full btn-secondary btn-sm justify-start">Ctrl+Click: Eliminar (Rojo)</button>
+                <button id="action-select-all" class="w-full btn-secondary btn-sm justify-start">Seleccionar Todo</button>
+                <button id="action-invert" class="w-full btn-secondary btn-sm justify-start">Invertir Selección</button>
+              </div>
+            </div>
+
+            <div class="card p-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Stats del Rango</h3>
+              <div class="grid grid-cols-2 gap-4 text-sm" id="range-stats">
+                <div class="bg-bg-tertiary p-3 rounded-lg">
+                  <div class="text-text-muted">Parejas</div>
+                  <div id="stat-pairs" class="font-display font-bold text-poker-gold">0/468</div>
+                </div>
+                <div class="bg-bg-tertiary p-3 rounded-lg">
+                  <div class="text-text-muted">Suited</div>
+                  <div id="stat-suited" class="font-display font-bold text-poker-gold">0/312</div>
+                </div>
+                <div class="bg-bg-tertiary p-3 rounded-lg">
+                  <div class="text-text-muted">Offsuit</div>
+                  <div id="stat-offsuit" class="font-display font-bold text-poker-gold">0/936</div>
+                </div>
+                <div class="bg-bg-tertiary p-3 rounded-lg">
+                  <div class="text-text-muted">Broadways</div>
+                  <div id="stat-broadways" class="font-display font-bold text-poker-gold">0/160</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide text-center">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Más Herramientas</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/herramientas/equity" class="btn-secondary">Equity Calculator</a>
+          <a href="/herramientas/pot-odds" class="btn-secondary">Pot Odds / MDF</a>
+          <a href="/herramientas/icm" class="btn-secondary">ICM Calculator</a>
+          <a href="/herramientas/trainers" class="btn-secondary">Trainers</a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+      const PRESETS: Record<string, string> = {
+        'utg-rfi': '22+, A2s+, ATo+, K9s+, KTo+, Q9s+, QTo+, J9s+, T9s+, 98s+, 87s+, 76s+, 65s+',
+        'mp-rfi': '22+, A2s+, ATo+, K9s+, KTo+, Q9s+, QTo+, J9s+, JTo, T9s+, 98s+, 87s+, 76s+, 65s+, 54s+',
+        'co-rfi': '22+, A2s+, A2o+, K9s+, KTo+, Q9s+, QTo+, J9s+, JTo, T9s+, T8s+, 98s+, 97s+, 87s+, 86s+, 76s+, 75s+, 65s+, 64s+, 54s+, 53s+',
+        'btn-rfi': '22+, A2s+, A2o+, K2s+, K5o+, Q2s+, Q7o+, J2s+, J7o+, T2s+, T7o+, 92s+, 96o+, 82s+, 86o+, 72s+, 75o+, 62s+, 64o+, 52s+, 53o+, 42s+, 43o+, 32s+',
+        'btn-3bet': 'JJ+, AKs, AKo, AQs, A5s-A2s, K5s-K2s, Q9s-Q8s, J9s-J8s, T9s-T8s, 98s-97s, 87s-86s, 76s-75s',
+        'bb-3bet': 'TT+, AKs, AQs, AKo, KQs, A5s-A2s, K5s-K2s, Q9s-Q8s, J9s-J8s, T9s-T8s, 98s-97s, 87s-86s, 76s-75s, 65s-64s, 54s',
+        'btn-4bet': 'QQ+, AK, A5s-A2s, K5s-K4s',
+        'bb-call': '22-99, A2s-A9s, ATo-AJo, KTs-KJo, QTs-QJo, JTs-JTo, T9s-T9o, 98s-98o, 87s-87o, 76s-76o, 65s-65o, 54s',
+      };
+
+      const cellState: Record<string, 'value' | 'bluff' | 'removed' | null> = {};
+
+      function initMatrix() {
+        const tbody = document.getElementById('matrix-body') as HTMLTableSectionElement | null;
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        RANKS.forEach((r1, i) => {
+          const tr = document.createElement('tr');
+          const th = document.createElement('th');
+          th.className = 'w-10 text-center font-mono text-xs text-text-muted';
+          th.textContent = r1;
+          tr.appendChild(th);
+
+          RANKS.forEach((r2, j) => {
+            const td = document.createElement('td');
+            td.className = 'w-10 h-10 relative';
+
+            let hand: string;
+            if (i === j) {
+              hand = r1 + r1;
+            } else if (i < j) {
+              hand = r1 + r2 + 's';
+            } else {
+              hand = r2 + r1 + 'o';
+            }
+
+            td.dataset.hand = hand;
+
+            const isPair = i === j;
+            const combos = isPair ? 6 : (i < j ? 4 : 12);
+
+            td.innerHTML = `
+              <div class="absolute inset-0 flex items-center justify-center text-xs font-mono text-text-muted transition-all duration-150 hand-label">${hand}</div>
+              <div class="absolute bottom-0 right-0 m-1 text-[10px] font-bold text-text-muted/50 hand-combos">${combos}</div>
+            `;
+
+            td.addEventListener('click', (e) => handleCellClick(td as HTMLTableCellElement, e));
+            td.addEventListener('contextmenu', (e) => {
+              e.preventDefault();
+              handleCellClick(td as HTMLTableCellElement, { ...e, ctrlKey: true });
+            });
+
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+
+        updateStats();
+      }
+
+      function handleCellClick(td: HTMLTableCellElement, e: MouseEvent) {
+        const hand = td.dataset.hand;
+        if (!hand) return;
+        const isShift = e.shiftKey;
+        const isCtrl = e.ctrlKey || e.metaKey;
+
+        if (isCtrl) {
+          cellState[hand] = 'removed';
+          td.className = 'w-10 h-10 relative bg-poker-red/20 border border-poker-red/50';
+        } else if (e.shiftKey) {
+          cellState[hand] = 'bluff';
+          td.className = 'w-10 h-10 relative bg-poker-gold/30 border border-poker-gold/50';
+        } else {
+          cellState[hand] = 'value';
+          td.className = 'w-10 h-10 relative bg-poker-gold/50';
+        }
+
+        updateHandDisplay(td, hand);
+        updateStats();
+      }
+
+      function updateHandDisplay(td: HTMLTableCellElement, hand: string) {
+        const label = td.querySelector('.hand-label') as HTMLElement | null;
+        const combosEl = td.querySelector('.hand-combos') as HTMLElement | null;
+        if (label) label.textContent = hand;
+        if (combosEl) {
+          const isPair = hand.length === 2 && hand[0] === hand[1];
+          const isSuited = hand.endsWith('s');
+          const combos = isPair ? 6 : (isSuited ? 4 : 12);
+          combosEl.textContent = String(combos);
+        }
+      }
+
+      function parseRange(notation: string): string[] {
+        const hands: string[] = [];
+        const parts = notation.split(',').map(p => p.trim());
+
+        parts.forEach(part => {
+          if (part.includes('+')) {
+            const base = part.replace('+', '');
+            if (base.length === 2 && base[0] === base[1]) {
+              const rank = base[0];
+              const idx = '23456789TJQKA'.indexOf(rank);
+              for (let i = idx; i < 13; i++) {
+                hands.push('23456789TJQKA'[i] + '23456789TJQKA'[i]);
+              }
+            } else if (base.endsWith('s')) {
+              const high = base[0];
+              const low = base[1];
+              const highIdx = '23456789TJQKA'.indexOf(high);
+              const lowIdx = '23456789TJQKA'.indexOf(low);
+              for (let i = lowIdx; i <= highIdx; i++) {
+                hands.push(high + '23456789TJQKA'[i] + 's');
+              }
+            } else if (base.endsWith('o')) {
+              const high = base[0];
+              const low = base[1];
+              const highIdx = '23456789TJQKA'.indexOf(high);
+              const lowIdx = '23456789TJQKA'.indexOf(low);
+              for (let i = lowIdx; i <= highIdx; i++) {
+                hands.push(high + '23456789TJQKA'[i] + 'o');
+              }
+            }
+          } else if (part.includes('-')) {
+            const [start, end] = part.split('-');
+            if (start.length === 2 && end.length === 2 && start[0] === start[1] && end[0] === end[1]) {
+              const startIdx = '23456789TJQKA'.indexOf(start[0]);
+              const endIdx = '23456789TJQKA'.indexOf(end[0]);
+              for (let i = startIdx; i <= endIdx; i++) {
+                hands.push('23456789TJQKA'[i] + '23456789TJQKA'[i]);
+              }
+            } else if (start.endsWith('s') && end.endsWith('s')) {
+              const sHigh = start[0];
+              const eHigh = end[0];
+              const sHighIdx = '23456789TJQKA'.indexOf(sHigh);
+              const eHighIdx = '23456789TJQKA'.indexOf(eHigh);
+              for (let i = eHighIdx; i <= sHighIdx; i++) {
+                hands.push('23456789TJQKA'[i] + '23456789TJQKA'[i + 1] + 's');
+              }
+            }
+          } else {
+            hands.push(part);
+          }
+        });
+        return hands;
+      }
+
+      function clearRange() {
+        Object.keys(cellState).forEach(k => delete cellState[k]);
+        document.querySelectorAll('#matrix-body td').forEach((td: HTMLTableCellElement) => {
+          td.className = 'w-10 h-10 relative';
+          updateHandDisplay(td, td.dataset.hand || '');
+        });
+        updateStats();
+      }
+
+      function loadPreset(preset: string) {
+        if (preset === 'custom') {
+          clearRange();
+          return;
+        }
+        const notation = PRESETS[preset];
+        if (!notation) return;
+
+        clearRange();
+        const hands = parseRange(notation);
+        hands.forEach(hand => {
+          cellState[hand] = 'value';
+          const td = document.querySelector(`[data-hand="${hand}"]`) as HTMLTableCellElement | null;
+          if (td) {
+            td.className = 'w-10 h-10 relative bg-poker-gold/50';
+            updateHandDisplay(td, hand);
+          }
+        });
+        updateStats();
+      }
+
+      function updateStats() {
+        let pairs = 0, suitedCount = 0, offsuit = 0, broadways = 0;
+        let totalCombos = 0;
+
+        const broadwayRanks = new Set(['A', 'K', 'Q', 'J', 'T']);
+
+        Object.entries(cellState).forEach(([hand, state]) => {
+          if (state === 'removed') return;
+          const isPair = hand.length === 2 && hand[0] === hand[1];
+          const isSuited = hand.endsWith('s');
+          const combos = isPair ? 6 : (isSuited ? 4 : 12);
+
+          totalCombos += combos;
+          if (isPair) pairs += combos;
+          else if (isSuited) suitedCount += combos;
+          else offsuit += combos;
+
+          const ranks = isPair ? [hand[0], hand[0]] : [hand[0], hand[1]];
+          if (ranks.some(r => broadwayRanks.has(r))) broadways += combos;
+        });
+
+        const totalEl = document.getElementById('total-combos');
+        const pctEl = document.getElementById('total-pct');
+        const pairsEl = document.getElementById('stat-pairs');
+        const suitedEl = document.getElementById('stat-suited');
+        const offsuitEl = document.getElementById('stat-offsuit');
+        const broadwaysEl = document.getElementById('stat-broadways');
+
+        if (totalEl) totalEl.textContent = String(totalCombos);
+        if (pctEl) pctEl.textContent = (totalCombos / 1326 * 100).toFixed(1);
+        if (pairsEl) pairsEl.textContent = pairs + '/468';
+        if (suitedEl) suitedEl.textContent = suitedCount + '/312';
+        if (offsuitEl) offsuitEl.textContent = offsuit + '/936';
+        if (broadwaysEl) broadwaysEl.textContent = broadways + '/160';
+      }
+
+      function exportNotation() {
+        const hands = Object.entries(cellState)
+          .filter(([_, state]) => state !== 'removed' && state !== null)
+          .map(([hand]) => hand);
+
+        const outputEl = document.getElementById('export-output') as HTMLTextAreaElement | null;
+        if (!outputEl) return;
+
+        if (hands.length === 0) {
+          outputEl.value = 'Rango vacío';
+          return;
+        }
+
+        const pairs = hands.filter(h => h.length === 2 && h[0] === h[1]).sort().reverse();
+        const suitedHands = hands.filter(h => h.endsWith('s')).sort();
+        const offsuitHands = hands.filter(h => h.endsWith('o')).sort();
+
+        let output = '';
+        if (pairs.length) output += pairs.join(', ') + '\n';
+        if (suitedHands.length) output += suitedHands.join(', ') + '\n';
+        if (offsuitHands.length) output += offsuitHands.join(', ');
+        if (outputEl) outputEl.value = output.trim();
+      }
+
+      function exportPIO() {
+        const hands = Object.entries(cellState)
+          .filter(([_, state]) => state !== 'removed' && state !== null)
+          .map(([hand]) => hand);
+        const outputEl = document.getElementById('export-output') as HTMLTextAreaElement | null;
+        if (outputEl) outputEl.value = hands.join('\n');
+      }
+
+      function exportFlopzilla() {
+        const hands = Object.entries(cellState)
+          .filter(([_, state]) => state !== 'removed' && state !== null)
+          .map(([hand]) => hand);
+        const outputEl = document.getElementById('export-output') as HTMLTextAreaElement | null;
+        if (outputEl) outputEl.value = hands.join(', ');
+      }
+
+      document.getElementById('preset-select')?.addEventListener('change', (e: Event) => {
+        const target = e.target as HTMLSelectElement | null;
+        if (target) loadPreset(target.value);
+      });
+
+      document.getElementById('clear-range')?.addEventListener('click', clearRange);
+
+      document.getElementById('export-notation')?.addEventListener('click', exportNotation);
+      document.getElementById('export-pio')?.addEventListener('click', exportPIO);
+      document.getElementById('export-flopzilla')?.addEventListener('click', exportFlopzilla);
+
+      document.getElementById('action-value')?.addEventListener('click', () => { });
+      document.getElementById('action-bluff')?.addEventListener('click', () => { });
+      document.getElementById('action-remove')?.addEventListener('click', () => { });
+      document.getElementById('action-select-all')?.addEventListener('click', () => {
+        document.querySelectorAll('#matrix-body td').forEach(td => {
+          const hand = (td as HTMLTableCellElement).dataset.hand;
+          if (!hand) return;
+          if (!cellState[hand] || cellState[hand] === 'removed') {
+            cellState[hand] = 'value';
+            td.className = 'w-10 h-10 relative bg-poker-gold/50';
+          }
+        });
+        updateStats();
+      });
+      document.getElementById('action-invert')?.addEventListener('click', () => {
+        document.querySelectorAll('#matrix-body td').forEach(td => {
+          const hand = (td as HTMLTableCellElement).dataset.hand;
+          if (!hand) return;
+          if (cellState[hand] === 'value') {
+            cellState[hand] = 'removed';
+            td.className = 'w-10 h-10 relative bg-poker-red/20 border border-poker-red/50';
+          } else if (!cellState[hand] || cellState[hand] === 'removed') {
+            cellState[hand] = 'value';
+            td.className = 'w-10 h-10 relative bg-poker-gold/50';
+          }
+        });
+        updateStats();
+      });
+
+      document.getElementById('show-combos')?.addEventListener('change', (e: Event) => {
+        const target = e.target as HTMLInputElement | null;
+        if (!target) return;
+        document.querySelectorAll('.hand-combos').forEach(el => {
+          (el as HTMLElement).style.display = target.checked ? 'block' : 'none';
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', initMatrix);
+    </script>
+  </main>
+</BaseLayout>

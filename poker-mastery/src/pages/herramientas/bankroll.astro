@@ -1,0 +1,427 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Bankroll & Variance Simulator - Poker Mastery" description="Simulador de bankroll y varianza: Risk of Ruin, Kelly Criterion, Monte Carlo, confidence intervals, RoR heatmap. Gratis, offline." canonical="/herramientas/bankroll">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          Herramienta Profesional · Gratis · Offline · Monte Carlo
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">Bankroll & Variance Simulator</h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Risk of Ruin, Kelly Criterion, simulaciones Monte Carlo (100k+ trials). Confidence intervals, RoR heatmap, required bankroll por winrate. Gestión profesional de bankroll.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide max-w-4xl mx-auto">
+        <div class="card p-6 md:p-8 space-y-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Parámetros de Simulación</h3>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Winrate (bb/100)</label>
+                  <input type="number" id="winrate" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="5" step="0.5" min="-20" max="50" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Desviación Estándar (bb/100)</label>
+                  <input type="number" id="stddev" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="100" step="1" min="10" max="300" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Bankroll Inicial (bb)</label>
+                  <input type="number" id="bankroll" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="5000" step="100" min="0" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Manos a Simular</label>
+                  <input type="number" id="hands" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="100000" step="10000" min="10000" max="1000000" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Número de Simulaciones</label>
+                  <input type="number" id="sims" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="200" step="50" min="50" max="1000" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-text-secondary mb-1">Nivel de Confianza (%)</label>
+                  <input type="number" id="confidence" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary" value="95" step="1" min="80" max="99" />
+                </div>
+              </div>
+
+              <button id="run-simulation" class="w-full btn-primary">Ejecutar Simulación Monte Carlo</button>
+
+              <div class="border-t border-border-default pt-6" id="formulas-container"></div>
+            </div>
+
+            <div class="space-y-6">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Resultados Monte Carlo</h3>
+
+              <div class="grid grid-cols-2 gap-4" id="mc-summary">
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Pérdida Promedio</div>
+                  <div id="mc-avg" class="text-2xl font-display font-bold text-text-primary">-- bb</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Peor Caso (P5)</div>
+                  <div id="mc-p5" class="text-2xl font-display font-bold text-error">-- bb</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Mejor Caso (P95)</div>
+                  <div id="mc-p95" class="text-2xl font-display font-bold text-success">-- bb</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Risk of Ruin (MC)</div>
+                  <div id="mc-ror" class="text-2xl font-display font-bold text-error">--</div>
+                </div>
+              </div>
+
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <h4 class="font-semibold text-text-primary mb-2">Distribución de Resultados Finales</h4>
+                <canvas id="distribution-chart" height="200"></canvas>
+              </div>
+
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <h4 class="font-semibold text-text-primary mb-2">RoR Heatmap (Winrate vs Bankroll)</h4>
+                <canvas id="heatmap-chart" height="250"></canvas>
+              </div>
+
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <h4 class="font-semibold text-text-primary mb-2">Trayectorias de Muestra (10 runs)</h4>
+                <canvas id="trajectories-chart" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-border-default pt-6" id="formulas-container"></div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide text-center">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Más Herramientas</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/herramientas/equity" class="btn-secondary">Equity Calculator</a>
+          <a href="/herramientas/pot-odds" class="btn-secondary">Pot Odds / MDF</a>
+          <a href="/herramientas/icm" class="btn-secondary">ICM Calculator</a>
+          <a href="/herramientas/range-builder" class="btn-secondary">Range Builder</a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const FORMULAS = [
+        { title: 'Risk of Ruin (Analítico)', latex: '$$ RoR = e^{-\\frac{2 \\times WR \\times BR}{\\sigma^2}} $$' },
+        { title: 'Kelly Criterion', latex: '$$ f^* = \\frac{WR}{\\sigma^2} $$' },
+        { title: 'Bankroll Mínimo (RoR objetivo)', latex: '$$ BR_{min} = -\\frac{\\sigma^2 \\times \\ln(RoR_{target})}{2 \\times WR} $$' },
+        { title: 'Confidence Interval (Monte Carlo)', latex: '$$ CI = \\bar{x} \\pm z_{\\alpha/2} \\times \\frac{s}{\\sqrt{n}} $$' },
+      ];
+
+      function renderFormulas() {
+        const container = document.getElementById('formulas-container');
+        if (!container) return;
+        container.innerHTML = `
+          <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Fórmulas (LaTeX)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            ${FORMULAS.map(f => `
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>${f.title}:</strong>
+                <div class="formula-render mt-2">${f.latex}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        if (window.renderMathInElement && typeof window.renderMathInElement === 'function') {
+          container.querySelectorAll('.formula-render').forEach((el: Element) => {
+            (el as HTMLElement).dataset.formula = (el as HTMLElement).dataset.formula || '';
+            window.renderMathInElement(el as HTMLElement, {
+              delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+              ],
+              throwOnError: false,
+            });
+          });
+        }
+      }
+
+      function normalRandom(mean = 0, std = 1) {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
+
+      function calculateAnalytic() {
+        const wrInput = document.getElementById('winrate') as HTMLInputElement | null;
+        const sdInput = document.getElementById('stddev') as HTMLInputElement | null;
+        const brInput = document.getElementById('bankroll') as HTMLInputElement | null;
+        if (!wrInput || !sdInput || !brInput) return;
+
+        const wr = parseFloat(wrInput.value) / 100;
+        const sd = parseFloat(sdInput.value) / 100;
+        const br = parseFloat(brInput.value);
+
+        if (wr <= 0) {
+          (document.getElementById('ror-analytic') as HTMLElement).textContent = '100% (WR ≤ 0)';
+          (document.getElementById('kelly') as HTMLElement).textContent = 'N/A (WR ≤ 0)';
+          (document.getElementById('min-br') as HTMLElement).textContent = '∞';
+          (document.getElementById('opt-br') as HTMLElement).textContent = '∞';
+          return;
+        }
+
+        // Risk of Ruin
+        const ror = Math.exp(-2 * wr * br / (sd * sd));
+        (document.getElementById('ror-analytic') as HTMLElement).textContent = (ror * 100).toFixed(4) + '%';
+
+        // Kelly
+        const kelly = wr / (sd * sd);
+        (document.getElementById('kelly') as HTMLElement).textContent = (kelly * 100).toFixed(2) + '%';
+
+        // Min bankroll for RoR < 1%
+        const minBR = -(sd * sd * Math.log(0.01)) / (2 * wr);
+        (document.getElementById('min-br') as HTMLElement).textContent = Math.ceil(minBR).toLocaleString() + ' bb';
+
+        // Optimal bankroll (full Kelly)
+        const optBR = (sd * sd) / wr;
+        (document.getElementById('opt-br') as HTMLElement).textContent = Math.ceil(optBR).toLocaleString() + ' bb';
+      }
+
+      function runMonteCarlo() {
+        const wrInput = document.getElementById('winrate') as HTMLInputElement | null;
+        const sdInput = document.getElementById('stddev') as HTMLInputElement | null;
+        const brInput = document.getElementById('bankroll') as HTMLInputElement | null;
+        const handsInput = document.getElementById('hands') as HTMLInputElement | null;
+        const simsInput = document.getElementById('sims') as HTMLInputElement | null;
+        const confidenceInput = document.getElementById('confidence') as HTMLInputElement | null;
+
+        if (!wrInput || !sdInput || !brInput || !handsInput || !simsInput) return;
+
+        const wr = parseFloat(wrInput.value) / 100;
+        const sd = parseFloat(sdInput.value) / 100;
+        const br = parseFloat(brInput.value);
+        const hands = parseInt(handsInput.value);
+        const sims = parseInt(simsInput.value);
+        const confidence = parseFloat(confidenceInput?.value || '95') / 100;
+
+        const btn = document.getElementById('run-simulation') as HTMLButtonElement | null;
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Simulando...';
+        }
+
+        setTimeout(() => {
+          const results = [];
+          let ruinCount = 0;
+          const trajectories: number[][] = [];
+
+          for (let s = 0; s < sims; s++) {
+            let currentBR = br;
+            let minBR = br;
+            const trajectory = [br];
+            let ruined = false;
+
+            for (let h = 0; h < hands; h++) {
+              const result = normalRandom(wr, sd);
+              currentBR += result;
+              minBR = Math.min(minBR, currentBR);
+              if (h % Math.floor(hands / 100) === 0) trajectory.push(currentBR);
+              if (currentBR <= 0) {
+                ruined = true;
+                break;
+              }
+            }
+
+            if (ruined) ruinCount++;
+            results.push(currentBR);
+            if (trajectories.length < 10) trajectories.push(trajectory);
+          }
+
+          results.sort((a, b) => a - b);
+          const avg = results.reduce((a, b) => a + b, 0) / results.length;
+          const p5 = results[Math.floor(results.length * 0.05)];
+          const p95 = results[Math.floor(results.length * 0.95)];
+          const mcRoR = ruinCount / sims;
+
+          (document.getElementById('mc-avg') as HTMLElement).textContent = (avg - br).toFixed(0) + ' bb';
+          (document.getElementById('mc-p5') as HTMLElement).textContent = (p5 - br).toFixed(0) + ' bb';
+          (document.getElementById('mc-p95') as HTMLElement).textContent = (p95 - br).toFixed(0) + ' bb';
+          (document.getElementById('mc-ror') as HTMLElement).textContent = (mcRoR * 100).toFixed(2) + '%';
+
+          drawDistributionChart(results, br);
+          drawHeatmapChart(wr, sd);
+          drawTrajectoriesChart(trajectories, br);
+
+          const runBtn = document.getElementById('run-simulation') as HTMLButtonElement | null;
+          if (runBtn) {
+            runBtn.disabled = false;
+            runBtn.textContent = 'Ejecutar Simulación Monte Carlo';
+          }
+        }, 100);
+      }
+
+      function drawDistributionChart(results: number[], br: number) {
+        const canvas = document.getElementById('distribution-chart') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        canvas.width = canvas.parentElement?.clientWidth || 600;
+        canvas.height = 200;
+
+        const min = Math.min(...results);
+        const max = Math.max(...results);
+        const bins = 40;
+        const binWidth = (max - min) / bins;
+        const histogram = new Array(bins).fill(0);
+
+        results.forEach(val => {
+          const bin = Math.min(bins - 1, Math.floor((val - min) / binWidth));
+          histogram[bin]++;
+        });
+
+        const maxCount = Math.max(...histogram);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        histogram.forEach((count, i) => {
+          const height = (count / maxCount) * 180;
+          const x = (i / bins) * canvas.width;
+          const w = canvas.width / bins - 1;
+          const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - height);
+          gradient.addColorStop(0, '#D4A843');
+          gradient.addColorStop(1, '#E8C56D');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x, canvas.height - height, w, height);
+        });
+
+        // Mean line
+        const avg = results.reduce((a, b) => a + b, 0) / results.length;
+        const avgX = ((avg - min) / (max - min)) * canvas.width;
+        ctx.strokeStyle = '#C0392B';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(avgX, 0);
+        ctx.lineTo(avgX, canvas.height);
+        ctx.stroke();
+      }
+
+      function drawHeatmapChart(wr: number, sd: number) {
+        const canvas = document.getElementById('heatmap-chart') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        canvas.width = canvas.parentElement?.clientWidth || 600;
+        canvas.height = 250;
+
+        const wrRange = [0.5, 1, 2, 3, 4, 5, 7.5, 10, 15]; // bb/100
+        const brRange = [500, 1000, 2000, 3000, 5000, 7500, 10000, 15000, 20000]; // bb
+        const cellW = canvas.width / wrRange.length;
+        const cellH = canvas.height / brRange.length;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        wrRange.forEach((w, wi) => {
+          brRange.forEach((b, bi) => {
+            const wPerHand = w / 100;
+            const sdPerHand = sd / 100;
+            const ror = Math.exp(-2 * wPerHand * b / (sdPerHand * sdPerHand));
+
+            let color;
+            if (ror < 0.001) color = '#27AE60';
+            else if (ror < 0.01) color = '#2ECC71';
+            else if (ror < 0.05) color = '#F39C12';
+            else if (ror < 0.1) color = '#E67E22';
+            else if (ror < 0.2) color = '#E74C3C';
+            else color = '#C0392B';
+
+            ctx.fillStyle = color;
+            ctx.fillRect(wi * cellW, bi * cellH, cellW - 1, cellH - 1);
+
+            ctx.fillStyle = ror < 0.1 ? 'white' : 'black';
+            ctx.font = '10px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText((ror * 100).toFixed(1) + '%', wi * cellW + cellW / 2, bi * cellH + cellH / 2 + 3);
+          });
+        });
+
+        // Labels
+        ctx.fillStyle = '#495057';
+        ctx.font = '11px DM Sans';
+        ctx.textAlign = 'center';
+        wrRange.forEach((w, i) => {
+          ctx.fillText(w + ' bb/100', i * cellW + cellW / 2, canvas.height - 5);
+        });
+        brRange.forEach((b, i) => {
+          ctx.fillText(b.toLocaleString() + ' bb', 30, i * cellH + cellH / 2 + 4);
+        });
+      }
+
+      function drawTrajectoriesChart(trajectories: number[][], br: number) {
+        const canvas = document.getElementById('trajectories-chart') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        canvas.width = canvas.parentElement?.clientWidth || 600;
+        canvas.height = 200;
+
+        const maxPoints = Math.max(...trajectories.map(t => t.length));
+        const allValues = trajectories.flat();
+        const min = Math.min(...allValues);
+        const max = Math.max(...allValues);
+        const range = max - min || 1;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        trajectories.forEach((traj, i) => {
+          const colors = ['#D4A843', '#E8C56D', '#27AE60', '#2ECC71', '#3498DB', '#5DADE2', '#9B59B6', '#BB8FCE', '#E74C3C', '#EC7063'];
+          ctx.strokeStyle = colors[i % colors.length];
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.8;
+          ctx.beginPath();
+
+          traj.forEach((val, idx) => {
+            const x = (idx / (maxPoints - 1)) * canvas.width;
+            const y = canvas.height - ((val - min) / range) * canvas.height * 0.9;
+            if (idx === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+
+        // Starting bankroll line
+        const brY = canvas.height - ((br - min) / range) * canvas.height * 0.9;
+        ctx.strokeStyle = '#6C757D';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(0, brY);
+        ctx.lineTo(canvas.width, brY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      document.getElementById('run-simulation')?.addEventListener('click', runMonteCarlo);
+
+      document.addEventListener('DOMContentLoaded', () => {
+        calculateAnalytic();
+        renderFormulas();
+      });
+
+      // Recalculate analytic on input change
+      ['winrate', 'stddev', 'bankroll'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', calculateAnalytic);
+      });
+    </script>
+  </main>
+</BaseLayout>

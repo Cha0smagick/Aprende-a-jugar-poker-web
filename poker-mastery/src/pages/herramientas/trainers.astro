@@ -1,0 +1,209 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Trainers Gamificados - Poker Mastery" description="Trainers gamificados con Spaced Repetition (SM-2): Preflop, Flop Texture, CBet, Turn/River, ICM, Mental Game, Hand Reading, Leak Finder. 500+ drills." canonical="/herramientas/trainers">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          Herramienta Profesional · Gratis · Offline · SM-2
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">Trainers Gamificados</h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Entrena tu intuición poker con Spaced Repetition (algoritmo SM-2). 500+ drills con feedback GTO instantáneo. Rastrea tu progreso, rachas y debilidades.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <a href="/herramientas/trainers/preflop" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🧠</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Preflop Range Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Spaced repetition SM-2. 150+ drills. Open, 3-bet, 4-bet, squeeze, cold call por posición. Feedback GTO con explicación.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-blue">150+ Drills</span>
+                <span class="badge badge-blue">SM-2</span>
+                <span class="badge badge-blue">GTO Feedback</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/flop-texture" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🌊</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Flop Texture Classifier</h3>
+              <p class="text-text-secondary text-sm mb-4">Clasifica 1000+ flops. Wet/Dry, connected/paired, rainbow/two-tone/monotone. Frecuencias c-bet por textura.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-green">1000+ Flops</span>
+                <span class="badge badge-green">Clasificación</span>
+                <span class="badge badge-green">C-Bet %</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/cbet" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🎯</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">CBet Decision Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Spots reales flop→turn→river. Explicación GTO vs exploit. Range vs range. Sizing selection.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-orange">Real Spots</span>
+                <span class="badge badge-orange">GTO vs Exploit</span>
+                <span class="badge badge-orange">Multi-street</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/turn-river" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🌳</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Turn/River Decision Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Árboles de decisión postflop. Planificación multi-street desde el flop. Delayed c-bet, probe bets, overbets.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-purple">Decision Trees</span>
+                <span class="badge badge-purple">Planning</span>
+                <span class="badge badge-purple">Multi-street</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/icm" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🏆</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">ICM Quiz Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Situaciones de burbuja/FT. Chip EV vs $EV. Risk premium visualization. Push/fold charts.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-yellow">Bubble</span>
+                <span class="badge badge-yellow">Final Table</span>
+                <span class="badge badge-yellow">Risk Premium</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/mental-game" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🧘</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Tilt Recognition Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Escenarios video + respuesta. Ejercicios de respiración. Tilt tracker. Pre-game routine.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-red">Video Scenarios</span>
+                <span class="badge badge-red">Breathing</span>
+                <span class="badge badge-red">Tracker</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/hand-reading" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🔍</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Hand Reading Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Range narrowing street by street. Bayesian updating visual. Asignación de rangos preflop → postflop.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-blue">Bayesian</span>
+                <span class="badge badge-blue">Street-by-street</span>
+                <span class="badge badge-blue">Visualization</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+
+          <a href="/herramientas/trainers/leak-finder" class="card-interactive p-6 group relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">🔧</div>
+              <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Leak Finder Trainer</h3>
+              <p class="text-text-secondary text-sm mb-4">Base de datos hands con tags. Filtros por posición, acción, street, resultado. Identifica leaks estadísticos.</p>
+              <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+                <span class="badge badge-green">Database</span>
+                <span class="badge badge-green">Tags</span>
+                <span class="badge badge-green">Filters</span>
+              </div>
+              <span class="btn-primary btn-sm">Entrenar →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-8 text-center">Cómo Funciona el SM-2</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div class="card p-6 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-3xl">1️⃣</div>
+            <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Respuesta</h3>
+            <p class="text-text-secondary">Después de cada drill, calificas tu respuesta: Again (0), Hard (1), Good (2), Easy (3).</p>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-3xl">2️⃣</div>
+            <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Algoritmo</h3>
+            <p class="text-text-secondary">SM-2 calcula el intervalo óptimo: Again → 1min, Hard → 6min, Good → 10min × factor, Easy → 4d × factor.</p>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-3xl">3️⃣</div>
+            <h3 class="font-display font-semibold text-heading-md text-text-primary mb-2">Repetición</h3>
+            <p class="text-text-secondary">El drill reaparece en el intervalo calculado. Si aciertas, el intervalo crece exponencialmente. Si fallas, se resetea.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-8 text-center">Estadísticas de tu Progreso</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div class="card p-6 text-center">
+            <div class="text-3xl font-display font-bold text-poker-gold mb-1" id="stat-total-drills">0</div>
+            <div class="text-text-muted">Drills Completados</div>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="text-3xl font-display font-bold text-success mb-1" id="stat-accuracy">0%</div>
+            <div class="text-text-muted">Precisión Media</div>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="text-3xl font-display font-bold text-poker-gold mb-1" id="stat-streak">0</div>
+            <div class="text-text-muted">Racha Actual (días)</div>
+          </div>
+          <div class="card p-6 text-center">
+            <div class="text-3xl font-display font-bold text-blue-500 mb-1" id="stat-due">0</div>
+            <div class="text-text-muted">Drills Pendientes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide text-center">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Más Herramientas</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/herramientas/equity" class="btn-secondary">Equity Calculator</a>
+          <a href="/herramientas/pot-odds" class="btn-secondary">Pot Odds / MDF</a>
+          <a href="/herramientas/icm" class="btn-secondary">ICM Calculator</a>
+          <a href="/herramientas/range-builder" class="btn-secondary">Range Builder</a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const stats = JSON.parse(localStorage.getItem('poker-mastery-trainer-stats') || '{}');
+        document.getElementById('stat-total-drills').textContent = stats.totalDrills || 0;
+        document.getElementById('stat-accuracy').textContent = (stats.accuracy || 0).toFixed(1) + '%';
+        document.getElementById('stat-streak').textContent = stats.streak || 0;
+        document.getElementById('stat-due').textContent = stats.dueDrills || 0;
+      });
+    </script>
+  </main>
+</BaseLayout>

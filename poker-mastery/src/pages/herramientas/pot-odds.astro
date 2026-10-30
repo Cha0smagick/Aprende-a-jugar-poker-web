@@ -1,0 +1,200 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout title="Pot Odds / MDF / Alpha Calculator - Poker Mastery" description="Calculadora de pot odds, MDF, alpha, implied odds con LaTeX paso a paso. Sliders dinámicos, gratis y offline." canonical="/herramientas/pot-odds">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+          Herramienta Profesional · Gratis · Offline · LaTeX
+        </div>
+        <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-4">Pot Odds / MDF / Alpha</h1>
+        <p class="text-body-lg text-text-secondary mb-8 max-w-2xl mx-auto">Cálculo paso a paso con fórmulas LaTeX renderizadas. Sliders dinámicos para implied odds, reverse implied odds, y alpha. Minimum Defense Frequency automático.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide max-w-4xl mx-auto">
+        <div class="card p-6 md:p-8 space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Entradas</h3>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">Tamaño del Bote ($)</label>
+                <input type="number" id="pot-size" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" value="100" step="1" min="0" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">Apuesta del Rival ($)</label>
+                <input type="number" id="bet-size" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" value="50" step="1" min="0" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">Tu Equity Estimada (%)</label>
+                <input type="number" id="equity" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" value="30" step="1" min="0" max="100" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">Implied Odds Estimados ($ extra al ganar)</label>
+                <input type="number" id="implied-odds" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" value="0" step="1" min="0" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">Reverse Implied Odds ($ extra al perder)</label>
+                <input type="number" id="reverse-implied" class="w-full px-4 py-2.5 bg-bg-tertiary border border-border-default rounded-lg text-text-primary placeholder-text-muted" value="0" step="1" min="0" />
+              </div>
+              <button id="calculate-btn" class="w-full btn-primary">Calcular</button>
+            </div>
+
+            <div class="space-y-4">
+              <h3 class="font-display font-semibold text-heading-lg text-text-primary">Resultados</h3>
+              <div class="grid grid-cols-2 gap-4" id="results-grid">
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Equity Necesaria</div>
+                  <div id="req-equity" class="text-2xl font-display font-bold text-poker-gold">--</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Pot Odds</div>
+                  <div id="pot-odds" class="text-2xl font-display font-bold text-text-primary">--</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">Alpha (α)</div>
+                  <div id="alpha" class="text-2xl font-display font-bold text-text-primary">--</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg">
+                  <div class="text-xs text-text-muted">MDF</div>
+                  <div id="mdf" class="text-2xl font-display font-bold text-poker-gold">--</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg md:col-span-2">
+                  <div class="text-xs text-text-muted">EV del Call</div>
+                  <div id="ev-call" class="text-2xl font-display font-bold text-success">--</div>
+                </div>
+                <div class="bg-bg-tertiary p-4 rounded-lg md:col-span-2">
+                  <div class="text-xs text-text-muted">Decisión</div>
+                  <div id="decision" class="text-xl font-semibold text-text-primary">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-border-default pt-6">
+            <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Fórmulas (LaTeX)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>Pot Odds:</strong>
+                <div class="formula-render mt-2" data-formula="\\frac{\\text{Call}}{\\text{Bote} + \\text{Call}}"></div>
+              </div>
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>Equity Necesaria (MRE):</strong>
+                <div class="formula-render mt-2" data-formula="\\frac{\\text{Call}}{\\text{Bote} + \\text{Call}} \\times 100\\%"></div>
+              </div>
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>Alpha (α):</strong>
+                <div class="formula-render mt-2" data-formula="\\alpha = \\frac{\\text{Apuesta}}{\\text{Bote} + \\text{Apuesta}}"></div>
+              </div>
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>MDF:</strong>
+                <div class="formula-render mt-2" data-formula="\\text{MDF} = 1 - \\alpha = \\frac{\\text{Bote}}{\\text{Bote} + \\text{Apuesta}}"></div>
+              </div>
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>EV Call (básico):</strong>
+                <div class="formula-render mt-2" data-formula="EV = (\\text{Equity} \\times \\text{Bote Total}) - ((1-\\text{Equity}) \\times \\text{Call})"></div>
+              </div>
+              <div class="bg-bg-tertiary p-4 rounded-lg">
+                <strong>EV Call (con Implied):</strong>
+                <div class="formula-render mt-2" data-formula="EV = (\\text{Equity} \\times (\\text{Bote} + \\text{Call} + \\text{Implied})) - ((1-\\text{Equity}) \\times (\\text{Call} + \\text{Reverse}))"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-border-default pt-6">
+            <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-4">Tabla de Referencia Rápida</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-border-default">
+                    <th class="text-left p-2 font-semibold text-text-primary">Apuesta</th>
+                    <th class="text-left p-2 font-semibold text-text-primary">Pot Odds</th>
+                    <th class="text-left p-2 font-semibold text-text-primary">Equity Necesaria</th>
+                    <th class="text-left p-2 font-semibold text-text-primary">MDF</th>
+                  </tr>
+                </thead>
+                <tbody id="reference-table">
+                  <tr class="border-b border-border-light"><td class="p-2">25% pot</td><td class="p-2">5:1</td><td class="p-2">16.7%</td><td class="p-2">80%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">33% pot</td><td class="p-2">4:1</td><td class="p-2">20%</td><td class="p-2">75%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">50% pot</td><td class="p-2">3:1</td><td class="p-2">25%</td><td class="p-2">67%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">66% pot</td><td class="p-2">2.5:1</td><td class="p-2">28.6%</td><td class="p-2">60%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">75% pot</td><td class="p-2">2.33:1</td><td class="p-2">30%</td><td class="p-2">57%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">100% pot</td><td class="p-2">2:1</td><td class="p-2">33.3%</td><td class="p-2">50%</td></tr>
+                  <tr class="border-b border-border-light"><td class="p-2">150% pot</td><td class="p-2">1.67:1</td><td class="p-2">37.5%</td><td class="p-2">40%</td></tr>
+                  <tr><td class="p-2">200% pot</td><td class="p-2">1.5:1</td><td class="p-2">40%</td><td class="p-2">33%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide text-center">
+        <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Más Herramientas</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/herramientas/equity" class="btn-secondary">Equity Calculator</a>
+          <a href="/herramientas/icm" class="btn-secondary">ICM Calculator</a>
+          <a href="/herramientas/range-builder" class="btn-secondary">Range Builder</a>
+          <a href="/herramientas/trainers" class="btn-secondary">Trainers</a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const calculateBtn = document.getElementById('calculate-btn') as HTMLButtonElement | null;
+        if (!calculateBtn) return;
+
+        calculateBtn.addEventListener('click', () => {
+          const potInput = document.getElementById('pot-size') as HTMLInputElement | null;
+          const betInput = document.getElementById('bet-size') as HTMLInputElement | null;
+          const equityInput = document.getElementById('equity') as HTMLInputElement | null;
+          const impliedInput = document.getElementById('implied-odds') as HTMLInputElement | null;
+          const reverseInput = document.getElementById('reverse-implied') as HTMLInputElement | null;
+
+          if (!potInput || !betInput || !equityInput || !impliedInput || !reverseInput) return;
+
+          const pot = parseFloat(potInput.value) || 0;
+          const bet = parseFloat(betInput.value) || 0;
+          const equity = (parseFloat(equityInput.value) || 0) / 100;
+          const implied = parseFloat(impliedInput.value) || 0;
+          const reverse = parseFloat(reverseInput.value) || 0;
+
+          const totalPot = pot + bet;
+          const call = bet;
+          const totalPotAfterCall = totalPot + call;
+
+          const alpha = bet / (pot + bet);
+          const mdf = 1 - alpha;
+          const requiredEquity = call / totalPotAfterCall;
+          const potOddsRatio = totalPot / call;
+
+          const evBasic = (equity * totalPotAfterCall) - ((1 - equity) * call);
+          const evImplied = (equity * (totalPotAfterCall + implied)) - ((1 - equity) * (call + reverse));
+
+          const decision = equity >= requiredEquity ? 'CALL ✅' : 'FOLD ❌';
+          const decisionClass = equity >= requiredEquity ? 'text-success' : 'text-error';
+
+          (document.getElementById('req-equity') as HTMLElement).textContent = (requiredEquity * 100).toFixed(1) + '%';
+          (document.getElementById('pot-odds') as HTMLElement).textContent = potOddsRatio.toFixed(2) + ':1';
+          (document.getElementById('alpha') as HTMLElement).textContent = (alpha * 100).toFixed(1) + '%';
+          (document.getElementById('mdf') as HTMLElement).textContent = (mdf * 100).toFixed(1) + '%';
+          (document.getElementById('ev-call') as HTMLElement).textContent = '$' + evImplied.toFixed(2);
+          (document.getElementById('ev-call') as HTMLElement).className = 'text-2xl font-display font-bold ' + (evImplied >= 0 ? 'text-success' : 'text-error');
+          (document.getElementById('decision') as HTMLElement).textContent = decision;
+          (document.getElementById('decision') as HTMLElement).className = 'text-xl font-semibold ' + decisionClass;
+        });
+      });
+    </script>
+  </main>
+</BaseLayout>
