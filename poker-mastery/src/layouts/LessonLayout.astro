@@ -423,10 +423,10 @@ const {
           mountQuiz(container, config);
           break;
         case 'chart':
-          mountChart(container, config);
+          mountChart(container);
           break;
         case 'replayer':
-          mountReplayer(container, config);
+          mountReplay(container);
           break;
       }
     });
@@ -461,7 +461,7 @@ const {
       </div>
     `).join('');
     
-    (window as any).selectQuizOption = (btn: HTMLElement, qIdx: number, optIdx: number) => {
+    (window as any).selectQuizOption = (btn: HTMLElement, qIdx: number) => {
       const question = btn.closest('.quiz-question');
       const options = question?.querySelectorAll<HTMLButtonElement>('.quiz-option');
       const explanation = document.getElementById(`quiz-exp-${qIdx}`);
@@ -475,11 +475,11 @@ const {
       
       explanation?.classList.remove('hidden');
       
-      trackQuizAttempt(qIdx, isCorrect);
+      trackQuizAttempt(isCorrect);
     };
   }
 
-  function trackQuizAttempt(questionIndex: number, correct: boolean) {
+  function trackQuizAttempt(correct: boolean) {
     const lessonId = getLessonId();
     const stored = localStorage.getItem('poker-mastery-progress');
     if (!stored) return;
@@ -498,17 +498,12 @@ const {
     } catch (e) {}
   }
 
-  function mountChart(container: HTMLElement, config: any) {
+  function mountChart(container: HTMLElement) {
     container.innerHTML = `<div class="chart-container"><canvas id="chart-${Math.random()}"></canvas></div>`;
   }
 
-  function mountReplayer(container: HTMLElement, config: any) {
+  function mountReplay(container: HTMLElement) {
     container.innerHTML = `<div class="card p-4 text-center text-text-muted">Hand Replayer - Próximamente</div>`;
-  }
-
-  function showToast(message: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
-    if (window.showToast) window.showToast(message, type);
-    else alert(message);
   }
 </script>
 

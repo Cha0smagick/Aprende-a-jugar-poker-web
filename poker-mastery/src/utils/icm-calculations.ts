@@ -52,7 +52,7 @@ export function calculateICM(stacks: number[], prizes: number[]): ICMResult[] {
   }
 
   // Calculate bubble factor and risk premium
-  results.forEach((r, i) => {
+  results.forEach((r) => {
     r.bubbleFactor = r.chipEV > 0 ? r.icmEV / r.chipEV : 1;
     r.riskPremium = ((r.icmEV - r.chipEV) / r.chipEV) * 100;
   });

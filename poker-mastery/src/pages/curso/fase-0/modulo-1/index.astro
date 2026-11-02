@@ -1,0 +1,98 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const LESSONS = [
+  { num: 1, title: 'Reglas Oficiales de Texas Hold\'em', route: '/curso/fase-0/modulo-1/leccion-1', duration: '25 min', difficulty: 'beginner' },
+  { num: 2, title: 'Matemáticas Básicas: Pot Odds, Equity y EV', route: '/curso/fase-0/modulo-1/leccion-2', duration: '45 min', difficulty: 'beginner' },
+  { num: 3, title: 'Posiciones en la Mesa: UTG, MP, CO, BTN, SB, BB', route: '/curso/fase-0/modulo-1/leccion-3', duration: '25 min', difficulty: 'beginner' },
+  { num: 4, title: 'Acciones Legales: Check, Bet, Call, Raise, Fold, All-in', route: '/curso/fase-0/modulo-1/leccion-4', duration: '20 min', difficulty: 'beginner' },
+  { num: 5, title: 'Showdown: Reglas, Orden y "Las Cartas Hablan"', route: '/curso/fase-0/modulo-1/leccion-5', duration: '25 min', difficulty: 'beginner' },
+  { num: 6, title: 'Irregularidades Comunes y Cómo Manejarlas', route: '/curso/fase-0/modulo-1/leccion-6', duration: '30 min', difficulty: 'intermediate' },
+  { num: 7, title: 'Torneo vs Cash Game: Diferencias Clave', route: '/curso/fase-0/modulo-1/leccion-7', duration: '20 min', difficulty: 'beginner' },
+  { num: 8, title: 'Examen del Módulo 1', route: '/curso/fase-0/modulo-1/leccion-8', duration: '30 min', difficulty: 'beginner' },
+];
+---
+
+<BaseLayout title="Módulo 1: Reglas y Mecánicas - Poker Mastery" description="Reglas oficiales TDA 2024, estructura de apuestas, showdown, irregularidades. 8 lecciones, 3h." canonical="/curso/fase-0/modulo-1">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <!-- Módulo Header -->
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+            🟢 Fase 0 · Fundamentos · Módulo 1 de 3
+          </div>
+          <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-6">
+            Módulo 1: Reglas y Mecánicas
+          </h1>
+          <p class="text-body-lg text-text-secondary mb-10 max-w-2xl mx-auto">
+            Las reglas oficiales del poker, estructura de apuestas, showdown e irregularidades. La base inquebrantable sobre la que construirás todo tu juego futuro.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold">8</div>
+              <div class="text-sm text-text-muted">Lecciones</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold">3h</div>
+              <div class="text-sm text-text-muted">Duración estimada</div>
+            </div>
+          </div>
+
+          <a href="/curso/fase-0/modulo-1/leccion-1" class="btn-gold btn-lg">Comenzar la Lección 1</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lecciones -->
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Lecciones del Módulo 1</h2>
+          <p class="text-body-lg text-text-secondary">Completa las lecciones en orden. Cada una desbloquea la siguiente.</p>
+        </header>
+
+        <div class="space-y-4">
+          {LESSONS.map((l) => (
+            <a href={l.route} class="card p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4 group hover:border-poker-felt/50 transition-colors border-l-4 border-l-poker-felt">
+              <div class="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center text-xl font-mono font-bold text-text-primary group-hover:bg-poker-felt group-hover:text-white transition-colors">
+                {l.num}
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-heading-md text-text-primary group-hover:text-poker-felt transition-colors">{l.title}</h3>
+                <div class="flex items-center gap-3 text-xs text-text-muted mt-1">
+                  <span>{l.duration}</span>
+                  <span>•</span>
+                  <span class={`badge diff-${l.difficulty}`}>{l.difficulty.charAt(0).toUpperCase() + l.difficulty.slice(1)}</span>
+                </div>
+              </div>
+              <svg class="w-5 h-5 text-text-muted group-hover:text-poker-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Proyecto Práctico -->
+    <section class="section">
+      <div class="container-wide">
+        <div class="felt-bg rounded-2xl p-8 md:p-12 text-center max-w-3xl mx-auto">
+          <h2 class="font-display font-bold text-display-sm md:text-display-md text-white mb-4">🎯 Proyecto Práctico: Simulador de Mano Completa</h2>
+          <p class="text-poker-gold-light text-body-lg mb-6 max-w-xl mx-auto">
+            Al final del módulo, jugarás <strong>50 manos guiadas</strong> en nuestro simulador interactivo. Cada decisión te dará feedback inmediato explicando por qué es correcta o incorrecta, citando la regla exacta de TDA 2024.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/curso/fase-0/modulo-1/leccion-8" class="btn-secondary btn-lg">Rendir Examen del Módulo</a>
+            <a href="/herramientas/equity" class="btn-gold btn-lg">Probar Equity Calculator</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

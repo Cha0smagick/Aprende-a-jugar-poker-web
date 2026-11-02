@@ -204,7 +204,6 @@ import Footer from '@/components/layout/Footer.astro';
         const brInput = document.getElementById('bankroll') as HTMLInputElement | null;
         const handsInput = document.getElementById('hands') as HTMLInputElement | null;
         const simsInput = document.getElementById('sims') as HTMLInputElement | null;
-        const confidenceInput = document.getElementById('confidence') as HTMLInputElement | null;
 
         if (!wrInput || !sdInput || !brInput || !handsInput || !simsInput) return;
 
@@ -213,8 +212,6 @@ import Footer from '@/components/layout/Footer.astro';
         const br = parseFloat(brInput.value);
         const hands = parseInt(handsInput.value);
         const sims = parseInt(simsInput.value);
-        const confidence = parseFloat(confidenceInput?.value || '95') / 100;
-
         const btn = document.getElementById('run-simulation') as HTMLButtonElement | null;
         if (btn) {
           btn.disabled = true;
@@ -259,8 +256,8 @@ import Footer from '@/components/layout/Footer.astro';
           (document.getElementById('mc-p95') as HTMLElement).textContent = (p95 - br).toFixed(0) + ' bb';
           (document.getElementById('mc-ror') as HTMLElement).textContent = (mcRoR * 100).toFixed(2) + '%';
 
-          drawDistributionChart(results, br);
-          drawHeatmapChart(wr, sd);
+          drawDistributionChart(results);
+          drawHeatmapChart(sd);
           drawTrajectoriesChart(trajectories, br);
 
           const runBtn = document.getElementById('run-simulation') as HTMLButtonElement | null;
@@ -271,7 +268,7 @@ import Footer from '@/components/layout/Footer.astro';
         }, 100);
       }
 
-      function drawDistributionChart(results: number[], br: number) {
+      function drawDistributionChart(results: number[]) {
         const canvas = document.getElementById('distribution-chart') as HTMLCanvasElement | null;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -315,7 +312,7 @@ import Footer from '@/components/layout/Footer.astro';
         ctx.stroke();
       }
 
-      function drawHeatmapChart(wr: number, sd: number) {
+      function drawHeatmapChart(sd: number) {
         const canvas = document.getElementById('heatmap-chart') as HTMLCanvasElement | null;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -330,13 +327,14 @@ import Footer from '@/components/layout/Footer.astro';
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        const sdPerHand = sd / 100;
+
         wrRange.forEach((w, wi) => {
           brRange.forEach((b, bi) => {
             const wPerHand = w / 100;
-            const sdPerHand = sd / 100;
             const ror = Math.exp(-2 * wPerHand * b / (sdPerHand * sdPerHand));
 
-            let color;
+            let color: string;
             if (ror < 0.001) color = '#27AE60';
             else if (ror < 0.01) color = '#2ECC71';
             else if (ror < 0.05) color = '#F39C12';

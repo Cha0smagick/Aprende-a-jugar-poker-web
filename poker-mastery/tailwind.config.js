@@ -295,8 +295,5 @@ export default {
     { pattern: /border-poker-(felt|gold|red|black)/ },
     { pattern: /hover:bg-poker-(felt|gold|red|black)/ },
     { pattern: /hover:text-poker-(felt|gold|red|black)/ },
-    { pattern: /dark:bg-dark-surface-(PRIMARY|SECONDARY|TERTIARY)/ },
-    { pattern: /dark:text-dark-text-(PRIMARY|SECONDARY|MUTED)/ },
-    { pattern: /dark:border-dark-border-(DEFAULT|LIGHT|DARK)/ },
   ],
 };

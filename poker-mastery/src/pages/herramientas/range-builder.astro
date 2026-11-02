@@ -218,7 +218,6 @@ import Footer from '@/components/layout/Footer.astro';
       function handleCellClick(td: HTMLTableCellElement, e: MouseEvent) {
         const hand = td.dataset.hand;
         if (!hand) return;
-        const isShift = e.shiftKey;
         const isCtrl = e.ctrlKey || e.metaKey;
 
         if (isCtrl) {

@@ -1,0 +1,112 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const MODULES = [
+  {
+    id: 1,
+    title: 'Reglas y Mecánicas del Juego',
+    description: 'Reglas oficiales TDA 2024, estructura de apuestas, showdown, irregularidades. Simulador de mano completa incluido.',
+    lessons: 8,
+    duration: '3h',
+    icon: '📖',
+    badge: 'Novato',
+    route: '/curso/fase-0/modulo-1',
+  },
+  {
+    id: 2,
+    title: 'Matemáticas Esenciales del Poker',
+    description: 'Combinatoria, probabilidades, pot odds, implied odds, equity, EV. Calculadoras interactivas con LaTeX paso a paso.',
+    lessons: 10,
+    duration: '5h',
+    icon: '🧮',
+    badge: 'Novato',
+    route: '/curso/fase-0/modulo-2',
+  },
+  {
+    id: 3,
+    title: 'Terminología y Conceptos Base',
+    description: 'Glosario interactivo con spaced repetition. 200+ términos. Conceptos: SPR, polarizado/merged, range, nutted, capped.',
+    lessons: 7,
+    duration: '2h',
+    icon: '📚',
+    badge: 'Novato',
+    route: '/curso/fase-0/modulo-3',
+  },
+];
+---
+
+<BaseLayout title="Fase 0: Fundamentos Absolutos - Poker Mastery" description="La base inquebrantable: reglas, terminología y matemáticas esenciales que todo jugador profesional conoce de memoria." canonical="/curso/fase-0">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <!-- Fase Header -->
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+            🟢 Fase 0 · Fundamentos Absolutos · 25 lecciones · 10h
+          </div>
+          <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-6">
+            Fase 0: Fundamentos Absolutos
+          </h1>
+          <p class="text-body-lg text-text-secondary mb-10 max-w-2xl mx-auto">
+            Construye los cimientos inquebrantables sobre los que se asienta todo tu juego futuro. Muchos jugadores "experimentados" tienen gaps en las reglas básicas que les cuestan dinero real. No saltes esta fase.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {MODULES.map((m) => (
+              <article class="card p-6 md:p-8 group hover:border-poker-felt/50 transition-colors">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-2xl">{m.icon}</span>
+                  <span class="badge bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-medium px-3 py-1">{m.badge}</span>
+                </div>
+                <h3 class="font-display font-semibold text-heading-lg text-text-primary mb-2">{m.title}</h3>
+                <p class="text-text-secondary mb-4 line-clamp-2">{m.description}</p>
+                <div class="flex items-center justify-between text-sm text-text-muted">
+                  <span><svg class="w-4 h-4 inline mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> {m.lessons} lecciones</span>
+                  <span><svg class="w-4 h-4 inline mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m4 0v-2m-4 4V7m-2 4h6m0 0V3m0 0l-4 4m4 4l4-4"/></svg> {m.duration}</span>
+                </div>
+                <a href={m.route} class="mt-4 block w-full btn-primary text-center">Entrar al Módulo {m.id}</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Qué aprenderás -->
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Qué Dominarás al Terminar esta Fase</h2>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-poker-gold/10 flex items-center justify-center mx-auto mb-4 text-2xl">1️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Reglas Oficiales</h3>
+            <p class="text-text-secondary text-sm">TDA 2024, showdown, irregularidades, cash vs torneo.</p>
+          </div>
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-poker-gold/10 flex items-center justify-center mx-auto mb-4 text-2xl">2️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Matemáticas Esenciales</h3>
+            <p class="text-text-secondary text-sm">Pot odds, equity, EV, implied odds, MDF, alpha.</p>
+          </div>
+          <div class="card p-6">
+            <div class="w-12 h-12 rounded-xl bg-poker-gold/10 flex items-center justify-center mx-auto mb-4 text-2xl">3️⃣</div>
+            <h3 class="font-semibold text-heading-md text-text-primary mb-2">Terminología</h3>
+            <p class="text-text-secondary text-sm">200+ términos, posiciones, rangos, conceptos base.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center section">
+      <div class="container-wide">
+        <a href="/curso/fase-0/modulo-1" class="btn-gold btn-lg">Comenzar con el Módulo 1</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

@@ -302,22 +302,11 @@ import Footer from '@/components/layout/Footer.astro';
       });
 
       document.addEventListener('DOMContentLoaded', () => {
-        if (window.renderMathInElement && typeof window.renderMathInElement === 'function') {
-          document.querySelectorAll('.formula-render').forEach((el: Element) => {
-            const latex = (el as HTMLElement).getAttribute('data-formula') || (el as HTMLElement).textContent || '';
-            if (latex) {
-              (el as HTMLElement).textContent = '$$ ' + latex + ' $$';
-              window.renderMathInElement(el as HTMLElement, {
-                delimiters: [
-                  {left: '$$', right: '$$', display: true},
-                  {left: '$', right: '$', display: false},
-                ],
-                throwOnError: false,
-              });
-            }
-          });
-        }
+        renderFormulas();
       });
+
+      (window as any).renderFormulas = renderFormulas;
+      (window as any).removeStack = removeStack;
     </script>
   </main>
 </BaseLayout>

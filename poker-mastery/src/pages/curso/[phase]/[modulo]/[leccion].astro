@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import LessonLayout from '@/layouts/LessonLayout.astro';
+
+// Mapa de segmento de URL → nombre de colección de contenido
+const FASE_TO_COLLECTION: Record<string, string> = {
+  'fase-0': 'fase-0-fundamentos',
+  'fase-1': 'fase-1-preflop',
+  'fase-2': 'fase-2-postflop',
+  'fase-3': 'fase-3-avanzado',
+  'fase-4': 'fase-4-especializado',
+  'fase-5': 'fase-5-maestria',
+};
+
+export async function getStaticPaths() {
+  const FASE_TO_COLLECTION: Record<string, string> = {
+    'fase-0': 'fase-0-fundamentos',
+    'fase-1': 'fase-1-preflop',
+    'fase-2': 'fase-2-postflop',
+    'fase-3': 'fase-3-avanzado',
+    'fase-4': 'fase-4-especializado',
+    'fase-5': 'fase-5-maestria',
+  };
+  const paths: Array<{ params: { phase: string; modulo: string; leccion: string } }> = [];
+  for (const [phase, collectionName] of Object.entries(FASE_TO_COLLECTION)) {
+    try {
+      const collection = await getCollection(collectionName);
+      for (const entry of collection) {
+        const match = entry.slug.match(/^modulo-(\d+)-leccion-(\d+)$/);
+        if (match) {
+          paths.push({
+            params: { phase, modulo: `modulo-${match[1]}`, leccion: `leccion-${match[2]}` },
+          });
+        }
+      }
+    } catch {
+      // Colección vacía o sin archivos: se omite
+    }
+  }
+  return paths;
+}
+
+const { phase, modulo, leccion } = Astro.params as {
+  phase: string;
+  modulo: string;
+  leccion: string;
+};
+
+const collectionName = FASE_TO_COLLECTION[phase];
+if (!collectionName) {
+  throw new Error(`Fase desconocida: ${phase}`);
+}
+
+const allLessons = (await getCollection(collectionName)) as Array<{
+  slug: string;
+  data: any;
+  render: () => Promise<{ Content: any }>;
+}>;
+
+// Slug del contenido: modulo-N-leccion-M
+const slug = `${modulo}-${leccion}`;
+const entry = allLessons.find((e) => e.slug === slug);
+
+if (!entry) {
+  throw new Error(`Lección no encontrada: ${slug} en colección ${collectionName}`);
+}
+
+const { data } = entry;
+const { Content } = await entry.render();
+
+// Número de fase para el breadcrumb
+const phaseNum = Object.keys(FASE_TO_COLLECTION).indexOf(phase);
+
+const faseLabels: Record<number, string> = {
+  0: 'Fase 0: Fundamentos',
+  1: 'Fase 1: Preflop',
+  2: 'Fase 2: Postflop',
+  3: 'Fase 3: Avanzado',
+  4: 'Fase 4: Especializado',
+  5: 'Fase 5: Maestría',
+};
+
+const colorByPhase: Record<string, string> = {
+  'fase-0': 'green',
+  'fase-1': 'blue',
+  'fase-2': 'yellow',
+  'fase-3': 'orange',
+  'fase-4': 'red',
+  'fase-5': 'purple',
+};
+
+const phaseColor = colorByPhase[phase] ?? 'green';
+const difficultyLabel = data.difficulty.charAt(0).toUpperCase() + data.difficulty.slice(1);
+
+const canonical = `/curso/${phase}/${modulo}/${leccion}`;
+---
+
+<LessonLayout
+  title={data.title}
+  description={data.description}
+  canonical={canonical}
+  phaseTitle={faseLabels[phaseNum]}
+  phaseRoute={`/curso/${phase}`}
+  moduleTitle={`Módulo ${modulo.replace('modulo-', '')}`}
+  moduleRoute={`/curso/${phase}/${modulo}`}
+  phaseColor={phaseColor}
+  phaseBadge={parseInt(modulo.replace('modulo-', ''), 10) <= 3 ? 'Novato' : 'Avanzado'}
+  moduleNumber={parseInt(modulo.replace('modulo-', ''), 10)}
+  difficulty={data.difficulty}
+  difficultyLabel={difficultyLabel}
+  duration={data.estimatedTime ?? '30 min'}
+>
+  <slot name="content">
+    <Content class="prose-poker" />
+  </slot>
+</LessonLayout>

@@ -1,4 +1,4 @@
-export function calculateEquity(hand: string[], opponentHand: string[], board: string[]): number {
+export function calculateEquity(hand: string[], opponentHand: string[], board: string[] = []): number {
   // Simplified equity calculation for testing
   const [rank1, rank2] = [hand[0][0], hand[1][0]];
   const [opRank1, opRank2] = [opponentHand[0][0], opponentHand[1][0]];

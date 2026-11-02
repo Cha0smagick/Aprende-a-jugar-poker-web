@@ -179,7 +179,6 @@ import Footer from '@/components/layout/Footer.astro';
           const requiredEquity = call / totalPotAfterCall;
           const potOddsRatio = totalPot / call;
 
-          const evBasic = (equity * totalPotAfterCall) - ((1 - equity) * call);
           const evImplied = (equity * (totalPotAfterCall + implied)) - ((1 - equity) * (call + reverse));
 
           const decision = equity >= requiredEquity ? 'CALL ✅' : 'FOLD ❌';

@@ -293,7 +293,7 @@ import Footer from '@/components/layout/Footer.astro';
     (document.getElementById('verify-btn') as HTMLButtonElement).click();
   }
 
-  function downloadPDF(hash: string) {
+  function downloadPDF() {
     showToast('Generando PDF...', 'info');
     setTimeout(() => showToast('PDF descargado (demo)', 'success'), 1000);
   }
@@ -307,6 +307,11 @@ import Footer from '@/components/layout/Footer.astro';
       showToast('Enlace copiado al portapapeles', 'success');
     }
   }
+
+  // Exponer globalmente para los manejadores onclick del HTML
+  (window as any).verifyHash = verifyHash;
+  (window as any).downloadPDF = downloadPDF;
+  (window as any).shareDiploma = shareDiploma;
 
   function showToast(message: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
     if (window.showToast) {

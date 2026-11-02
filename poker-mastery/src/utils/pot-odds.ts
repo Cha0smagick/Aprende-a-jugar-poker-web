@@ -29,7 +29,6 @@ export function calculateEV(
   const call = bet;
   const totalPotAfterCall = totalPot + call;
 
-  const evBasic = (equity * totalPotAfterCall) - ((1 - equity) * call);
   const evWithImplied = (equity * (totalPotAfterCall + impliedOdds)) - ((1 - equity) * (call + reverseImpliedOdds));
 
   return evWithImplied;

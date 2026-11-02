@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const MODULES = [
+  { id: 15, title: 'GTO Fundamentals & Solver Usage', lessons: 12, duration: '6h', icon: '🟠', status: 'pronto', route: null },
+  { id: 16, title: 'ICM & Tournament Mastery', lessons: 10, duration: '5h', icon: '🟠', status: 'pronto', route: null },
+  { id: 17, title: 'Mental Game & Tilt Control', lessons: 8, duration: '4h', icon: '🟠', status: 'pronto', route: null },
+  { id: 18, title: 'Bankroll Management & Game Selection', lessons: 6, duration: '3h', icon: '🟠', status: 'pronto', route: null },
+  { id: 19, title: 'Population Analysis & Database Review', lessons: 8, duration: '4h', icon: '🟠', status: 'pronto', route: null },
+];
+---
+
+<BaseLayout title="Fase 3: Conceptos Avanzados - Poker Mastery" description="GTO, solvers, ICM, mental game, bankroll. Nivel élite." canonical="/curso/fase-3">
+  <Header slot="header" />
+  <Footer slot="footer" />
+
+  <main class="min-h-screen">
+    <section class="relative section-lg overflow-hidden">
+      <div class="container-wide relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-poker-felt/10 border border-poker-felt/20 rounded-full text-sm font-medium text-poker-felt mb-6">
+            🟠 Fase 3 · Conceptos Avanzados · 44 lecciones · 22h
+          </div>
+          <h1 class="font-display font-bold text-display-xl md:text-display-lg text-text-primary mb-6">
+            Fase 3: Conceptos Avanzados
+          </h1>
+          <p class="text-body-lg text-text-secondary mb-10 max-w-2xl mx-auto">
+            Teoría de juegos, solvers, ICM, bankroll, tilt control, population analysis. La separación entre buenos y grandes jugadores.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold">5</div>
+              <div class="text-sm text-text-muted">Módulos</div>
+            </div>
+            <div class="card p-4">
+              <div class="text-3xl font-display font-bold text-poker-gold">44</div>
+              <div class="text-sm text-text-muted">Lecciones</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-bg-secondary border-y border-border-default">
+      <div class="container-wide">
+        <header class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="font-display font-bold text-display-sm text-text-primary mb-4">Módulos de la Fase 3</h2>
+        </header>
+
+        <div class="space-y-4">
+          {MODULES.map((m) => (
+            <a href={m.route || '#'} class="card p-5 md:p-6 flex flex-col md:flex-row md:items-center gap-4 group border border-border-default hover:border-border-default">
+              <div class="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center text-xl font-mono font-bold text-text-primary">
+                {m.icon}
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-heading-md text-text-primary">{m.title}</h3>
+                <div class="flex items-center gap-3 text-xs text-text-muted mt-1">
+                  <span>{m.lessons} lecciones</span>
+                  <span>•</span>
+                  <span>{m.duration}</span>
+                </div>
+              </div>
+              <span class="badge bg-bg-tertiary text-text-muted">Próximamente</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center section">
+      <div class="container-wide">
+        <p class="text-text-muted mb-4">La Fase 3 está en desarrollo y estará disponible pronto.</p>
+        <a href="/curso" class="btn-secondary btn-lg">Volver al Currículo</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
