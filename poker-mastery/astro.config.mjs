@@ -4,8 +4,8 @@ import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
-  site: 'https://poker-mastery.github.io',
-  base: '/poker-mastery/',
+  site: 'https://cha0smagick.github.io',
+  base: '/Aprende-a-jugar-poker-web/',
   trailingSlash: 'always',
   build: {
     inlineStylesheets: 'auto',
